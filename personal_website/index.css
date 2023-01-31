@@ -1,0 +1,84 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    color:darkblue;
+    text-align: center;
+    font-size: 35px;
+}
+
+p {
+    font-size: 20px;
+}
+
+/*  general container */
+.container {
+    margin: auto;
+    padding: 0;
+    text-align: center;
+}
+
+.header {
+    grid-area: header;
+    background-color: aliceblue;
+    padding: 30px;
+    text-align: center;
+    font-size: 25px;
+}
+
+/* Grid */
+.grid-container {
+    display: grid;
+    /* layout of gird */
+    grid-template-areas: 
+    'header header header header header header' 
+    'left left middle middle right right' 
+    'footer footer footer footer footer footer';
+}
+
+/*  left, middle and right grid columns*/
+.left,
+.middle,
+.right {
+    padding: 10px;
+    font-size: 20px;
+    margin: 1%;
+    background-color: aliceblue;
+}
+
+.left {
+    grid-area: left;
+}
+
+.middle {
+    grid-area: middle;
+}
+
+.right {
+    grid-area: right;
+}
+
+.footer {
+    grid-area: footer;
+    background-color: aliceblue;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media (max-width: 600px) {
+    .grid-container {
+        grid-template-areas: 
+        'header header header header header header' 
+        'left left left left left left' 
+        'middle middle middle middle middle middle' 
+        'right right right right right right' 
+        'footer footer footer footer footer footer';
+    }
+}
