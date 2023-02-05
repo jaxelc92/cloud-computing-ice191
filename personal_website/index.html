@@ -219,23 +219,23 @@
                                     <h3 class="masthead-subheading font-weight-light mb-0">Intro to microservices: AWS S3, AWS DynamoDB & AWS Route53</h3>
                                     <!-- Assignment Modal - Text-->
 
-                                    <div class="modal-instruction-header">1. Creating a static website using AWS S3.
+                                    <div class="modal-instruction-header mb-3">1. Creating a static website using AWS S3.
                                         <p align="justify">
-                                            a) To create a bucket, first you must be registered with Amazon S3 and have a valid Amazon Web Services Access Key ID to authenticate requests. 
+                                            <b>a)</b> To create a bucket, first you must be registered with Amazon S3 and have a valid Amazon Web Services Access Key ID to authenticate requests. 
                                             Anonymous requests are never allowed to create buckets. Also by creating the bucket, you become the bucket owner. 
                                             Keep in mind that NOT EVERY STRING IS AN ACCEPTABLE BUCKET NAME. For more information on bucket naming restrictions visit <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html">Bucket naming rules.</a>
                                             Here, we are going to create a bucket using the AWS CLI, also the id and credentials we are using are already configured.
                                             For more information on aws credentials see <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html"> quick setup guide</a>. 
-                                            b) Having all setup files configured, we proceed to open the terminal and use the following command to create the bucket: <br>
+                                            <b>b)</b> Having all setup files configured, we proceed to open the terminal and use the following command to create the bucket: <br>
                                             <img src="assets/img/assignment_imgs/a2_1.png" alt=""><br>
                                             Where --bucket refers to the attribute and my-bucket name has to be replaced with your bucket's name. Then --region is the attribute for the region of your bucket, here we are using
                                             region us-east-1, which is the region where our credentials are configured.<br>
                                             Also, here we using command aws s3api instead of just aws s3, the main reason is because we need to call the AWS API so we can do another operations on S3 that come from other webservices, such as 
                                             uploading and downloading objects, manage our bucket and controlling the acceses to the S3 resources, and aws s3 only provieds simple operations such as storing backups, user-generated content and static assets. <br>
-                                            c) After creating the bucket we get the following output: <br>
+                                            <b>c)</b> After creating the bucket we get the following output: <br>
                                             <img src="assets/img/assignment_imgs/a2_1.2.png" alt=""><br>
                                             Which shows you where is the bucket located, or the endpoint of your bucket.<br>
-                                            d) Now you need to setup the bucket access policie, this is because when you get your bucket's website, it is publicly accessible and people can see and access your bucket's webite from anywhere using an endpoint.<br>
+                                            <b>d)</b> Now you need to setup the bucket access policie, this is because when you get your bucket's website, it is publicly accessible and people can see and access your bucket's webite from anywhere using an endpoint.<br>
                                             For this, there 2 ways to setup the bucket policy file. The first one is creating calling the aws command and passing as JSON like text as an argument, directly on the cli. The second way is creating a JSON file
                                             with the policy settings and then calling the file using the aws command. We are going to use the second way.<br>
                                             First we create a JSON file with the following information: <br>
@@ -246,18 +246,18 @@
                                             In the JSON file, we allow to publicly read objects in the bucket, this is needed for the bucket's website to be publicly accessed; the effect is set to allow, to allow this, and in Principal we define "*" for everythin
                                             in the bucket; then we select what operation is to be allowed in the S3 bucket, this is set in the Action property; and finally we set the Resource, which is our S3 bucket, in this case my bucket's name is jaxelc.cetystijuana.com.
                                             Note that there is a "/*" at the end, this specifies that we are setting the policy for every object, or content, inside the bucket.<br>
-                                            e) Now we need to put the policy into the bucket, calling the JSON file just created. Use the following command: <br>
+                                            <b>e)</b> Now we need to put the policy into the bucket, calling the JSON file just created. Use the following command: <br>
                                             <img src="assets/img/assignment_imgs/a2_1.4.png" width="100%" alt=""> <br>
                                             To check our policy, we use the following command: <br>
                                             <img src="assets/img/assignment_imgs/a2_1.5.png" width="100%" alt="">
                                             my-bucket should be replaced with bucket's name, in this case my bucket is named jaxelc.cetystijuana.com <br>
                                             You should get the following output with the policy settings: <br>
                                             <img src="assets/img/assignment_imgs/a2_1.6.png" width="100%" alt=""><br>
-                                            f) Now that the bucket has public access permissions, it is necessary to set the website configuration, this is the main html and 404 files. Use the following command: <br>
+                                            <b>f)</b> Now that the bucket has public access permissions, it is necessary to set the website configuration, this is the main html and 404 files. Use the following command: <br>
                                             <img src="assets/img/assignment_imgs/a2_1.7.png" width="100%" alt=""> <br>
                                             Here, my-bucket refers to your bucket's name. <br>
-                                            g) Next, create a directory that will be used to store all website's files (htmls,css,js,etc.).
-                                            h) In the CLI navigate through the folde you created for the website's files, and sync those files to your website's name, and the use the bucket's endpoint, obtained in step c, and see your bucket's website.<br>
+                                            <b>g)</b> Next, create a directory that will be used to store all website's files (htmls,css,js,etc.).
+                                            <b>h)</b> In the CLI navigate through the folde you created for the website's files, and sync those files to your website's name, and the use the bucket's endpoint, obtained in step c, and see your bucket's website.<br>
                                             Use the following command to sync your files to your bucket: <br>
                                             <img src="assets/img/assignment_imgs/a2_1.8.png" width="100%" alt=""><br>
                                             The dot means the folder you navigated to in the CLI, and the sync command updates any files to the destination, in this case, sync follows this syntax (origin, destination).
@@ -265,23 +265,23 @@
                                         </p>
                                     </div>
 
-                                    <div class="modal-instruction-header">2. Linking website to a subdomain of the main domain: cetystijuana.com</div>
+                                    <div class="modal-instruction-header mb-3">2. Linking website to a subdomain of the main domain: cetystijuana.com</div>
                                     <p align="justify">
                                         To link a subdomain of a parent domain, we use AWS webservice Route53. AWS Route53 is a highly available and scalable Domain Name System web service. It connects user requests to internet applications
                                         running on AWS or on-premises. This help to link subdomain to existing domains. To do this there are some steps that need to be followed. REMEMEBER that a valid Amazon Web Services account is needed in
                                         order to access Route53 services. There are some ways to link a subdomain, here we are going to use the AWS CLI. <br>
-                                        a) We are going to use the change-resource-record-sets command so we can create, change o delete a resource set, which contains authoritative DNS information for a specified domain name or subdomain name.
+                                        <b>a)</b> We are going to use the change-resource-record-sets command so we can create, change o delete a resource set, which contains authoritative DNS information for a specified domain name or subdomain name.
                                         For example, you can use ChangeResourceRecordSets to create a resource set that routes traffic for text.example.com to a web server that has an IP addres of 192.0.2.44. <br>
                                         This command creates a resource record set using the hosted-zone-id of the main domain and uses settings formatted in a JSON file.<br>
-                                        b) First create a JSON file to setup the resource record sets: <br>
+                                        <b>b)</b> First create a JSON file to setup the resource record sets: <br>
                                         <img src="assets/img/assignment_imgs/a2_2.png" width="100%" alt=""><br>
                                         In this JSON file, there are some options, the key Action, could be either CREATE, UPSERT or DELETE, we use CREATE to create a new resource record set. UPSERT is used to update and existing record set.
                                         Then specify the Resource settings: <br>
-                                        &emsp;1) the name of your new subdomain.<br>
-                                        &emsp;2) the is set to CNAME, this maps DNS queries for the name of the current record to another domain or subdomain.<br>
-                                        &emsp;3) The TTL (Time to live) is the resource record cache in seconds. Amazon Route53 uses this value for the alias target.<br>
-                                        &emsp;4) Finally set the record set value, which your subdomain will be redirected from, this is the bucket's website link that we got when we created the bucket.<br>
-                                        c) With the JSON file created, we use the following command to now create the resource record set, and we will link it to a Hosted Zone. NOTE THAT: The hosted zone must be already configured by the account's owner
+                                        &emsp;<b>1)</b> the name of your new subdomain.<br>
+                                        &emsp;<b>2)</b> the is set to CNAME, this maps DNS queries for the name of the current record to another domain or subdomain.<br>
+                                        &emsp;<b>3)</b> The TTL (Time to live) is the resource record cache in seconds. Amazon Route53 uses this value for the alias target.<br>
+                                        &emsp;<b>4)</b> Finally set the record set value, which your subdomain will be redirected from, this is the bucket's website link that we got when we created the bucket.<br>
+                                        <b>c)</b> With the JSON file created, we use the following command to now create the resource record set, and we will link it to a Hosted Zone. NOTE THAT: The hosted zone must be already configured by the account's owner
                                         in which you are working. For more information about working and create a hosted zone go to <a href="https://docs.aws.amazon.com/cli/latest/reference/route53/create-hosted-zone.html">Creating a Hosted Zone using AWS CLI.</a><br>
                                         <img src="assets/img/assignment_imgs/a2_2.2.png" width="100%" alt=""><br>
                                         The hosted zone id SHOULD be replaced with the hosted zone you are working into and then we call the JSON file we created with the resource record set settings to create a request for a Route53 traffic redirection service.<br>
@@ -289,36 +289,62 @@
                                         <img src="assets/img/assignment_imgs/a2_2.1.png" width="100%" alt=""><br>
                                         This prompts a request to use the AWS Route53 service to redirect domains and the status PENDING means that the request is processing. Once is done, the status changes to INSYNC, meaning that the new subdomain
                                         is ready to use.<br>
-                                        c) To check if your resource record set has been registered to the hosted zone resources you are working into, the following command prompts the list of all resource record set registered.<br>
+                                        <b>d)</b> To check if your resource record set has been registered to the hosted zone resources you are working into, the following command prompts the list of all resource record set registered.<br>
                                         <img src="assets/img/assignment_imgs/a2_2.3.png" width="100%" alt=""><br>
                                         If you don't see your subdomain working right away, wait a few minutes so the pending request in synced in.<br>
                                     </p>
 
-                                    <div class="modal-instruction-header">3. Adding self item to the students list in cetystijuana.com website.</div>
+                                    <div class="modal-instruction-header mb-3">3. Adding self item to the students list in cetystijuana.com website.</div>
                                     <p align="justify">
                                         To add yourself to the students section in the cetystijuana.com website, first you need to download, or sync in, all the files contained in that bucket, so you can edit them, and the upload the files.
                                         Here we are just going to edit the HTML file to add a div with our information, and the add our image to the correspongin folder.<br>
-                                        a) To download files from a S3 bucket, we are going to use the AWS CLI commmand SYNC.<br>
+                                        <b>a)</b> To download files from a S3 bucket, we are going to use the AWS CLI commmand SYNC.<br>
                                         This commands syncs directories and S3 prefixes. Recursively copies new and updated files from the source directory to the destination. Only creates folder in the destination if they contain one or more files.<br>
                                         The command sync follows the syntax (origin, destination).<br>
-                                        b) Before sync files from the bucket, I recommend creating a directory to store all those files. After creating the directory, navigate through it in the CLI and sync the files form the bucket to the directory.<br>
+                                        <b>b)</b> Before sync files from the bucket, I recommend creating a directory to store all those files. After creating the directory, navigate through it in the CLI and sync the files form the bucket to the directory.<br>
                                         <img src="assets/img/assignment_imgs/a2_3.1.png" width="100%" alt=""><br>
                                         These are just some files that were downloaded from cetystijuana.com bucket.<br>
-                                        c) Now, just go to that folder in your system and edit the index.html file to add yourself and sync the edited files back into the S3 bucket.<br>
+                                        <b>c)</b> Now, just go to that folder in your system and edit the index.html file to add yourself and sync the edited files back into the S3 bucket.<br>
                                         Here I added my self to the cetystijua.com website: <br>
-                                        <img src="assets/img/assignment_imgs/a2_3.2.png" alt=""><br>
+                                        <img src="assets/img/assignment_imgs/a2_3.2.png" width="100%" alt=""><br>
                                         IMPORTANT: Be careful when uploading files to the bucket, since this a collaborative bucket, files may be updated and synced up while you are editing your. This might run into files conflicts because of the last modified time of the source'
                                         is older than the newer modified time of the destination.<br>                                     
                                     </p>
 
-                                    <div class="modal-instruction-header">4. Creating an entry in the Students DynamoDB table using AWS CLI.</div>
+                                    <div class="modal-instruction-header mb-3">4. Creating an entry in the Students DynamoDB table using AWS CLI.</div>
                                     <p align="justify">
-
+                                        To create an entry in the DynamoDB Students table, need to use the following model:<br>
+                                        <b>
+                                            {<br>
+                                                &emsp;"id": "matricula",<br>
+                                                &emsp;"full_name": "NAME",<br>
+                                                &emsp;"persoinal_website": "s3_url"<br>
+                                            }<br>
+                                        </b>
+                                        There are two main ways to put an item into a dynamobd table, the first one is to call a JSON file that follows the rules for object type items, the second one is type in the command following by the item string syntax. Here we are 
+                                        using the second method, just using the command followed by the correct syntax to add the item.<br>
+                                        <b>a)</b> To put an item using that model, use the following command:<br>
+                                        <b>aws dynamodb put-item --table-name Students --item '{"id": {"S": "031973"}, "full_name": {"S": "Jorge Axel Cruz Jimenez"}, "personal_website": {"S": "jaxelc.cetystijuana.com"}}'</b><br>
+                                        &emsp; - Using <b>put-item</b> creates a new item, or replaces an old item with a new item. If the item that has the same primary key as the new item already exists in the specified table,
+                                        the new item completely replaces the existing item.<br>
+                                        &emsp; - The <b>--table-name</b> specifies the name of the table that the item is going to be put in. In this case the table's name is Students<br>
+                                        &emsp; - The <b>--item</b> is the attribute of dynamobd to specify the item to pun into the table.<br>
+                                        &emsp; - Finally, a syntax for a object like item need to follow a syntax, so here we specify the keys, an the values are denoted with a <b class="bolded">"S"</b> which denotes that the value is a string.<br>
+                                        <b>b)</b> Now, just check if your item is in the dynamobd table, use the following command. It will prompt all the existing items in the table:<br>
+                                        <b>aws dynamodb scan --table-name Students</b><br>
+                                        The <b>scan</b> method will iterate through all items in the table, returning all items and their values.<br>
                                     </p>
 
-                                    <div class="modal-instruction-header">5. Comments about: Not Just Code Monkeys by Martin Fowler.</div>
+                                    <div class="modal-instruction-header mb-3">5. Comments about: Not Just Code Monkeys by Martin Fowler.</div>
                                     <p align="justify">
-
+                                        I strongly agree with Martin Fowler about how scoiety categorize software developers and how their role is thought-provoking depoending on the area they are involved.
+                                        Also, many of software developers can't help themselves in this matters, because some of them, the majority of them, are introvert people, and it is not their fault, it's just how they are,
+                                        and sometimes companies tend to treat them in certain way just having that in mind, this means that developers are something that just "monkeys" that follow orders to type any code they are given. Also, this affects the way that software developers share their ideas to each other. Sometimes an idea
+                                        begins by watching or hearing others ideas, and this is also how their are, maybe they think that their ideas may be not that good to be heard, when it could be a awesome idea.<br>
+                                        I also think that it is important to know that there is good and evil, and it also exists in the software industry, and software developers should be aware and kind with their end-users and just trick people
+                                        for their own benefit, like the case of black patterns. And this is because EVERY software that it developed will impact the evironment that is the software is developed into.<br>
+                                        I think that independently of anyone's occupation, anyone should be able to be recognize as a high entity in their area, in comparison with other areas in society such as medicine, doctors are
+                                        highly recognize and respected just because they are doctors, and it is sad that software developers are not a recognizable in their area as they should<br>
                                     </p>
                                     
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
