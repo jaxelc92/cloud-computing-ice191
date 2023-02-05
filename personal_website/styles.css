@@ -154,8 +154,13 @@ h6, .h6 {
 }
 
 p {
+  font-size: 20px;
   margin-top: 0;
   margin-bottom: 1rem;
+}
+
+.modal-instruction-header {
+  font-size: 24px;
 }
 
 abbr[title],
@@ -11482,7 +11487,7 @@ html {
   background-color: rgba(50, 100, 155, 0.9);
 }
 .portfolio .portfolio-item .portfolio-item-caption:hover {
-  opacity: 1;
+  opacity: 0.5;
 }
 .portfolio .portfolio-item .portfolio-item-caption .portfolio-item-caption-content {
   font-size: 1.5rem;
