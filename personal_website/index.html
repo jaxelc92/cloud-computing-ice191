@@ -391,7 +391,157 @@
                                             <button  class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q1" aria-expanded="false">
                                                 Create a CloudFront distribution for your website.
                                             </button>
-                                        <div id="assignment-q1" class="collapse mb-5">lkasjdlkajsldkjalksd</div>
+                                        <div id="assignment-q1" class="collapse mb-5">
+                                            <p align="justify">
+                                                To crete a CloudFront distribution, an Amazon AWS valid account is needed and credentials need to be configured for that account. For more information on this, visit <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html">Quick setup guide.</a>
+                                                Besides this, just follow these steps in order to create a AWS CloudFront distribution:<br>
+                                                <b>a)</b> First you need to create a JSON file to set the distribution configuration. The JSON file should look something like this:<br>
+                                                <img src="assets/img/assignment_imgs/assignment3/cloud_dist_json1.png" width="100%" alt=""><br>
+                                                <img src="assets/img/assignment_imgs/assignment3/cloud_dist_json2.png" width="100%" alt=""><br><br>
+                                                Here there is the exaplnation of all these key-values in the JSON:
+
+                                                <ul align="justify">
+                                                    <li>
+                                                        <b>CallerReference:</b> This is a unique identifier for the distribution. This can be any string, it is used to identify the distribution request in the AWS Cloudfront servers.
+                                                    </li>
+                                                    <li>
+                                                        <b>Aliases:</b> This is a list of CNAMES that you want to associate with the distribution. In this case, there is only 1 CNAME that the distribution will be associated with. This is my domain "jaxelc.cetystijuana.com".
+                                                    </li>
+                                                    <li>
+                                                        <b>DefaultRootObject:</b> The object that CloudFront returns when a viewer requests the root URL of your distribution. In this case, it is "index.html" which is the main html file that renders the website.
+                                                    </li>
+                                                    <li>
+                                                        <b>Origins:</b> The origin information for the distribution. In this case, there is only 1 origin, which is the S3 bucket. So here need to define the information for the origin. The <b>Id</b> is an unique identifier for your origin, this is unique within the distribution. The <b>DomainName</b> is the origin DNS that was generated when the S3 bucket was created. The <b>CustomHeaders</b> is a list of HTTP header names and values that CloudFront adds to the requests that it sends to the origin. The <b>CustomOriginConfig</b> is a type to specify an origin that is not an Amazon S3 bucket, because this we are using an Amazon S3 bucket to host a static website we need to use this type with some settings:<br>
+                                                        <ul>
+                                                            <li>
+                                                                <b>HTTPPort:</b> This is the HTTP port that CloudFront uses to connect to the origin. It is specified to port 80, so this is the port that the origin listens to.
+                                                            </li>
+                                                            <li>
+                                                                <b>HTTPSPort:</b> This is the HTTPS port that CloudFront uses to connect to the origin. It is specified to port 443 that is the HTTPS port that the origin listens to.
+                                                            </li>
+                                                            <li>
+                                                                <b>OriginProtocolPolicy:</b> This specifies the HTTP or HTTPS protocols that CloudFront uses to connect to the origin. It is set to "http-only" to specify the protocol that CloudFront should use when communicating with the origin, so this means that CloudFront will only use HTTP to communicate with the origin, and all request from viewers to the CloudFront distribution will be automatically redirected to HTTPS.
+                                                            </li>
+                                                            <li>
+                                                                <b>OriginSslProtocols:</b> Specifies the minimun SSL/TLS protocol that CloudFront uses when connecting to the origin over HTTPS. Here we only specify 3 protocols, TLSv1, TLSv1.1 and TLSv1.2. For more information on minimun origin SSL protocol, visit <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginSSLProtocols">Minimun Origin SSL Protocol.</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <b>DefaultCacheBehavior:</b> Here we specify the cache settings for the distribution. This is a complex type because describes the default cache for the origin and there must be only one default cache behavior. Need to declare some settings for this behavior:
+                                                        <ul>
+                                                            <li>
+                                                                <b>TargetOriginId:</b> Here we specify what origin id we want to apply the cache settings to. In this case this has to be same as the origin id specified before, in this case it is "jaxelc.cetystijuana.com".
+                                                            </li>
+                                                            <li>
+                                                                <b>ViewerProtocolPolicy:</b> This is the protocol that viewers can use to access the files in the origin specified by the TargetOriginId when a request matches the path pattern of the origin cache behavior path pattern. This pattern can be ommited in this JSON and will be created by default anyways when creating the distribution. Here you can specify the followin options:<br>
+                                                                <ul>
+                                                                    <li>
+                                                                        <b>allow-all:</b> Viewers can use HTTP or HTTPS.
+                                                                    </li>
+                                                                    <li>
+                                                                        <b>redirect-to-https:</b> If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.
+                                                                    </li>
+                                                                    <li>
+                                                                        <b>https-only:</b> If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).
+                                                                    </li>
+                                                                </ul>
+                                                                It is important to mention that the only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects' cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously.
+                                                            </li>
+                                                            <li>
+                                                                <b>AllowedMethods:</b> Here we specify the methods that you want to allow viewers to use when they access your distribution. In this case, all 7 HTTP methods are allowed, and only GET and HEAD requests will be cached, this is specified in the JSON for the CachedMethods.
+                                                            </li>
+                                                            <li>
+                                                                <b>CachedMethods:</b> Specify only the HTTP methods that will be cached by the viewers when they access the distribution.
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <b>ForwardedValues:</b> This field specifies how CloudFront handles query strings, cookies and HTTP headers. <b>IMPORTANT:</b> This field is deprecated and it is recommended to use a cache policy or an origin request policy instead of this field.
+                                                        <ul>
+                                                            <li>
+                                                                <b>QueryString:</b> Indicates whether you want CloudFront to forward query strings to the origin that is associated with this cache behavior and cache based on the query string parameters. It is set to <b>false</b> so CloudFront doesn't forward any query string parameters to the origin, and doesn't cache based on query string parameters.
+                                                            </li>
+                                                            <li>
+                                                                <b>Cookies:</b> A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies.</a><br>
+                                                                Here we forward <b>none</b> so any of the cookies are forwarded by CloudFront.
+                                                            </li>
+                                                            <li>
+                                                                <b>Headers:</b> A complex type that specifies the Headers , if any, that you want CloudFront to forward to the origin for this cache behavior. For the headers that you specify, CloudFront also caches separate versions of a specified object that is based on the header values in viewer requests.
+                                                            </li>
+                                                            <li>
+                                                                <b>QueryStringCacheKeys:</b> A complex type that contains information about the query string parameters that you want CloudFront to use for caching for this cache behavior.
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <b>DefaultTTL, MinTTL and MaxTTL:</b> Time to Live (in seconds), the default, minimum and maximun of time that objects will stay in CloudFront caches before CloudFront forwards another request to the origin to determine whether the object has been updated.
+                                                    </li>
+                                                    <li>
+                                                        <b>Comment:</b> Any comment for the distribution.
+                                                    </li>
+                                                    <li>
+                                                        <b>Enabled:</b> From this field, you can enable or disable the selected distribution.
+                                                    </li>
+                                                    <li>
+                                                        <b>PriceClass:</b> The price class for the distribution. This sets the maximum price that you're willing to pay for CloudFront service. If you specify <b>PriceClass_All</b>, CloudFront responds to requests for your objects from all CloudFront edge locations.<br>
+                                                        If you specify a price class other than <b>PriceClass_All</b>, CloudFront serves your objects from the CloudFront edge location that has the lowest latency among the edge locations in your price class. Viewers who are in or near regions that are excluded from your specified price class may encounter slower performance.
+                                                    </li>
+                                                    <li>
+                                                        <b>ViewerCertificate:</b> A complex type that determines the distribution's SSL/TLS configuration for communicating with viewers.
+                                                        <ul>
+                                                            <li>
+                                                                <b>ACMCertificateArn:</b> If the distribution uses Aliases (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in Certificate Manager (ACM), provide the Amazon Resource Name (ARN) of the ACM certificate. CloudFront only supports ACM certificates in the US East (N. Virginia) Region (us-east-1 ).<br>
+                                                                If you specify an ACM certificate ARN, you must also specify values for <b>MinimumProtocolVersion</b> and <b>SSLSupportMethod</b>8.
+                                                            </li>
+                                                            <li>
+                                                                <b>SSLSupportMethod</b> If the distribution uses Aliases (alternate domain names or CNAMEs), specify which viewers the distribution accepts HTTPS connections from.
+                                                                <ul>
+                                                                    <li>
+                                                                        <b>sni-only:</b> The distribution accepts HTTPS connections from only viewers that support server name indication (SNI). This is recommended. Most browsers and clients support SNI.
+                                                                    </li>
+                                                                    <li>
+                                                                        <b>vip:</b> The distribution accepts HTTPS connections from all viewers including those that don't support SNI. This is not recommended, and results in additional monthly charges from CloudFront.
+                                                                    </li>
+                                                                    <li>
+                                                                        <b>static-ip:</b> This specifies if you have a use case that requires static IP addresses for the  distribution.
+                                                                    </li>
+                                                                    This is set to <b>sni-only</b> This means that CloudFront will only use Server Name Indication (SNI) to associate a domain name with an SSL/TLS certificate. <b>IMPORTANT:</b> SNI is an extension to the Transport Layer Security (TLS) protocol that allows a server to present multiple digital certificates on the same IP address and port number, and thus eliminates the need for a dedicated IP address for each SSL certificate. When a browser connects to a website over HTTPS, it sends the hostname of the website in the SNI field of the SSL/TLS handshake. The server then uses that hostname to determine which certificate to present to the browser for the secure connection. So by using <b>sni-only</b>, we are telling CloudFront to only serve HTTPS requests for the domain with a certificate that matches the domain name specified in the SNI field of the SSL/TLS handshake. This is a more cost-effective option as it doesn't require a dedicated IP address for each SSL certificate.
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                <b>MinimumProtocolVersion:</b> If the distribution uses Aliases (alternate domain names or CNAMEs), specify the security policy that you want CloudFront to use for HTTPS connections with viewers. The security policy determines two settings:
+                                                                <ul>
+                                                                    <li>
+                                                                        <b>The minimum SSL/TLS protocol that CloudFront can use to communicate with viewers.</b>
+                                                                    </li>
+                                                                    <li>
+                                                                        <b>The ciphers that CloudFront can use to encrypt the content that it returns to viewers.</b>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <b>IsIPV6Enabled:</b> If you want CloudFront to respond to IPv6 DNS requests with an IPv6 address for your distribution, specify true . If you specify false , CloudFront responds to IPv6 DNS requests with the DNS response code NOERROR and with no IP addresses. This allows viewers to submit a second request, for an IPv4 address for your distribution.
+                                                    </li>
+                                                </ul>
+                                            </p>
+                                            <p align="justify">
+                                                If you're using an Route 53 Amazon Web Services Integration alias resource record set to route traffic to your CloudFront distribution, you need to create a second alias resource record set when both of the following are true:
+                                                <ul align="justify">
+                                                    <li>
+                                                        You enable IPv6 for the distribution.
+                                                    </li>
+                                                    <li>
+                                                        You're using alternate domain names in the URLs for your objects.
+                                                    </li>
+                                                </ul>
+                                            </p>
+                                            <p align="justify">
+                                                If you created a CNAME resource record set, either with Route 53 Amazon Web Services Integration or with another DNS service, you don't need to make any changes. A CNAME record will route traffic to your distribution regardless of the IP address format of the viewer request.
+                                            </p>
+                                        </div>
 
                                         <!-- Accordion item 2 -->
                                         <button class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q2" aria-expanded="false">
