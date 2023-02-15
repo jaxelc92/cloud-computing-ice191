@@ -541,19 +541,114 @@
                                             <p align="justify">
                                                 If you created a CNAME resource record set, either with Route 53 Amazon Web Services Integration or with another DNS service, you don't need to make any changes. A CNAME record will route traffic to your distribution regardless of the IP address format of the viewer request.
                                             </p>
+                                            <p align="justify">
+                                                <b>b)</b> After having the JSON file with the distribution configuration create, you just need to use the command to create a distribution using the proper command to do so.<br>
+                                                Use the following command and call the JSON file for the config file:<br>
+                                                <img src="assets/img/assignment_imgs/assignment3/create_distribution_cmd.png" width="100%" alt="">
+                                                In this case I named my settings file cloudfront_distribution.json, and as it is specified in the file, this will create a CloudFront distribution for my domain jaxelc.cetystijuana.com. <br>
+                                                This will prompt an output with all the distribution configuration and you will have your distribution created. <br>
+                                                To see if your distribution settings, just use the following command and look for your CloudFront distribution: <br>
+                                                <code>aws cloudfront list-distributions</code> <br>
+
+                                                Now you can access your S3 website using you CloudFront distribution Domain Name.
+                                            </p>
                                         </div>
 
                                         <!-- Accordion item 2 -->
                                         <button class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q2" aria-expanded="false">
                                             Update your DNS Record to route to the CloudFront end point.
                                         </button>
-                                        <div id="assignment-q2" class="collapse mb-5">lkasjdlkajsldkjalksd</div>
+                                        <div id="assignment-q2" class="collapse mb-5"><p align="justify">
+                                            After creating the distribution, to update the DNS Record to route to the CloudFront distribution endpoint, we need to go and change the Route53 settings and change the Resource Record Sets to route traffic to the distribution instead of the S3 buckets.
+                                            This Record Set is a CNAME type because we are routing traffic from a domain name to another domain so when viewers make HTTP requests, the are sent to the distribution domain name instead of directly to the S3 bucket, so they will be redirected to their closest edge location and then access through your distribution domain, to the website. <br>
+                                            <b>S3 Buckets have fixed location because they are created whithin a region. Edge Locations help viewers to access the website through a distribution domain so they connect to the closest to them.</b> <br>
+                                            To create the resource record, use the following command and change the value of the resource record to the distribution domain name. You can check your distribution domain name by using the <code>aws cloudfront list-distribution</code> command, and look for your distribution settings
+                                            and the value of "DomainName". <br>
+                                            Update the Route53 config JSON file to change the resource record: <br>
+                                            <img src="assets/img/assignment_imgs/assignment3/route53_update_distributionDomain.png" width="100%" alt="">
+                                            In this case, my CloudFront distribution Domain Name is "d111z026qypboz.cloudfront.net" <br>
+                                            The action needs to be UPSERT, so it will update the resource record and not create a new one. UPSERT creates a new object if it doesn't exists, but if it does it updates the object.
+                                            Now use the command to change the settings on your Route53 config. <br>
+                                            Now just change the settings using the following command: <br>
+                                            <img src="assets/img/assignment_imgs/assignment3/route53_changebatch_cmd.png" width="100%" alt="">
+                                            This will update the resource record so that viewers can see the website from your CloudFront distribution, just wait for the changes to apply. The Route53 config looks something like this: <br>
+                                            <img src="assets/img/assignment_imgs/assignment3/route53_resourceRecordUpdate_cloudfront.png" width="100%" alt="">
+                                            Now you can access to your website using you desired domain name and it will redirected to your CloudFront distribution Domain Name. <br>
+                                            <br>
+                                            <b>IMPORTANT: </b> If you don't specify an Alias in your CloudFront Distribution settings file, you will get a 403 error. This is because CloudFront configured to access authorized domains, so we need to specify an Alias in the file, which will be our S3 website domain name, in order to properly access the website content. <br>
+                                            <br>
+                                            <b>NOTE:</b> As you can see, there is another resource record in the Route53 config, this is an extra step and it is necessary if you have an ACM Certificate and you want to use it in your website. <br>
+                                            As I already have an ACM Certificate, in the distribution config file there is a JSON object called <b>ViewerCertificate</b> to accept HTTPS requests by viewers, and since this distribution will be using this certificate, you need to create a new
+                                            resource record in the Route53 ResourceRecordSets for your S3 bucket. This is done by accessing the Route53 configuration file, and just create the a new resource record with ACM Certifcate's Resource Record Name and Value. <b>If you don't have an ACM Certificate, just ignore this step.</b>
+                                        </p></div>
 
                                         <!-- Accordion item 3 -->
                                         <button class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q3" aria-expanded="false">
                                             Explain what it means to minify website resources (html, js, css) and the advantages and disadvantages of this process.
                                         </button>
-                                        <div id="assignment-q3" class="collapse mb-5">lkasjdlkajsldkjalksd</div>
+                                        <div id="assignment-q3" class="collapse mb-5">
+                                            <p align="justify">
+                                                Minification refers to the process of removing unnecessary characters from website resources, such as HTML, CSS, and JavaScript files, in order to reduce their file size and improve website performance. <br>
+                                                During this process, we can eliminate reduntant code such as comments, white space, and formatting, as well as renaming variables amd function names to shorten them. <br>
+                                                Some common techniques used in minifying website resources are: <br>
+                                                <ul align="justify">
+                                                    <li>Removing unnecessary whitespace</li>
+                                                    <li>Removing comments from HTML, CSS, and JavaScript code.</li>
+                                                    <li>hortening variable and function names to reduce their length</li>
+                                                    <li>emoving unused code, such as CSS rules that are not being applied or JavaScript functions that are not being used.</li>
+                                                    <li>Combining multiple CSS or JavaScript files into a single file to reduce the number of requests made to the server.</li>
+                                                    <li>Using shorthand syntax for CSS properties, such as using "margin: 0" instead of "margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;"</li>
+                                                    <li>Removing redundant code, such as duplicate CSS rules or unused media queries.</li>
+                                                    <li>Minimizing the use of images or optimizing images to reduce their file size.</li>
+                                                </ul>
+                                            </p>
+                                            <p align="justify">Different minification techniques can be used depending on the type of file being minified and the specific requirements of the website or application. However, it's important to note that not all code can be safely minified, and some code may require different or specialized minification techniques to avoid errors or loss of functionality. <br>
+                                                Minifying website resources can help reduce page load times, improve website performance, and reduce server load, especially on slower connections or devices. It can also potentially improve search engine rankings and visibility. <br>
+                                                <br>
+                                                <b>Advantages of Minification:</b>
+                                                <ul align="justify">
+                                                    <li>
+                                                        <b>Improved website performance:</b> Smaller file sizes mean faster load times and reduced bandwidth usage, which can significantly improve website performance, especially on slower connections or devices. <br>
+
+                                                    </li>
+                                                    <li>
+                                                        <b>Reduced server load:</b> Smaller file sizes also mean less strain on the server, which can result in faster page rendering and lower server costs. <br>
+                                                        Server strain refers to the load or stress placed on a server as a result of processing requests and delivering content to clients. When a server receives a request from a client, it must process the request, retrieve the requested content, and then send it back to the client over the network. 
+                                                        This process can be resource-intensive, especially for high-traffic websites or complex web applications that require significant processing power and memory.
+                                                    </li>
+                                                    <li>
+                                                        <b>Better SEO (Search Engine Optimization):</b> Search engines consider page load time as a ranking factor, so faster loading pages can improve a website's search engine ranking and visibility. <br>
+                                                        SEO refers to the process of improving the visibility and ranking of a website or webpage in search engine results pages (SERPs). The objective of this is to increase organic (non-paid) traffic to a website by optimizing various on-page and off-page factors that search engines use to determine the relevance and authority of a website or webpage.
+                                                        These factors include website content, keywords, backlinks, website structure, page speed, mobile responsiveness, and more. By optimizing these factors, a website can improve its search engine ranking and visibility, which can result in more traffic and potential customers.
+                                                    </li>
+                                                </ul>
+                                            </p>
+                                            <p align="justify">
+                                                Although, Minifying website resource has great advantages, it also has disadvantages when using minifying techniques because some minification techniques, such as renaming variables or function names, can create issues with certain browsers or devices that do not support these changes. 
+                                                This can lead to unexpected behavior or errors on the website, which can negatively impact user experience. <br>
+                                                <br>
+                                                <b>Disadvantages of Minification:</b>
+                                                <ul align="justify">
+                                                    <li>
+                                                        <b>Reduced readability:</b> Minified code can be more difficult to read and understand, especially for developers who are not familiar with the specific minification tool used.
+                                                    </li>
+                                                    <li>
+                                                        <b>Debugging difficulties:</b> When an error occurs in minified code, it can be challenging to identify the specific line of code that is causing the issue, making debugging more difficult.
+                                                    </li>
+                                                    <li>
+                                                        <b>Potential loss of functionality:</b> In some cases, minification can remove important code that is needed for website functionality, leading to issues with the website's usability or performance.
+                                                    </li>
+                                                </ul>
+                                            </p>
+                                            <p align="justify">
+                                                As mention, another disadvantage of minifying website resources is the potential for compatibility issues with certain browsers or devices. Some minification techniques, such as renaming variables or function names, can create issues with certain browsers or devices that do not support these changes. 
+                                                This can lead to unexpected behavior or errors on the website, which can negatively impact user experience. <br>
+                                                Additionally, some minification tools may not be able to distinguish between essential and non-essential code, and may inadvertently remove code that is needed for specific website features or functionality. <br>
+                                                <br>
+                                                It is important to thoroughly test the website after minification and to ensure that it remains fully functional across all target browsers and devices. 
+                                                In some cases, it may be necessary to use different minification techniques or to disable certain minification features in order to ensure compatibility and maintain website functionality.
+                                            </p>
+                                        </div>
 
                                         <!-- Accordion item 4 -->
                                         <button class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q4" aria-expanded="false">
@@ -578,7 +673,71 @@
                                         <button class="accordion-button collapsed mb-3 mt-3" data-bs-toggle="collapse" data-bs-target="#assignment-q5" aria-expanded="false">
                                             Explain the difference between Growth mindset and Fixed mindset according to Carol Dweck.
                                         </button>
-                                        <div id="assignment-q5" class="collapse mb-5">lkasjdlkajsldkjalksd</div>
+                                        <div id="assignment-q5" class="collapse mb-5">
+                                            <p align="justify">
+                                                According to Carol Dweck, there are two types of mindsets that people adopt: a <b>growth mindset</b> and a <b>fixed mindset</b>. <br>
+                                            <ul align="justify">
+                                                <li>
+                                                    <b>Growth Mindset:</b> A growth mindset is a belief that one's abilities and intelligence can be developed and improved through hard work, dedication, and persistence. 
+                                                    People with a growth mindset embrace challenges, persist in the face of setbacks, and are not afraid to fail, as they see it as an opportunity to learn and grow. 
+                                                    They also celebrate the success of others and see it as a source of inspiration and motivation for their own growth and development.
+                                                </li>
+                                                <li>
+                                                    <b>Fixed Mindset:</b> A fixed mindset is a belief that one's abilities, talents, and intelligence are fixed and cannot be changed or improved upon. 
+                                                    People with a fixed mindset often avoid challenges, give up easily when faced with obstacles, and fear failure, as it confirms their belief in their own limitations. 
+                                                    They may also feel threatened by the success of others, as it undermines their own sense of competence.
+                                                </li>
+                                            </ul>
+                                            </p>
+                                            <p align="justify">
+                                                People with a growth mindset are more likely to achieve their full potential and succeed in life, as they are willing to take risks, learn from their mistakes, and put in the effort needed to improve their skills and abilities. 
+                                                In contrast, people with a fixed mindset may limit their own potential and miss out on opportunities for growth and development.
+                                            </p>
+                                            <table class="table">
+                                                <thead>
+                                                  <tr>
+                                                    <th></th>
+                                                    <th>Growth Mindset</th>
+                                                    <th>Fixed Mindset</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr>
+                                                    <td>Belief about intelligence and abilities</td>
+                                                    <td>Can be developed and improved through effort and persistence</td>
+                                                    <td>Are fixed and cannot be changed</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td>Attitude towards challenges</td>
+                                                    <td>Embrace challenges and see them as opportunities for growth and learning</td>
+                                                    <td>Avoid challenges and fear failure</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td>Response to setbacks and failures</td>
+                                                    <td>Persist in the face of setbacks and failures and see them as opportunities for learning and improvement</td>
+                                                    <td>Give up easily when faced with obstacles and see failures as a reflection of their own limitations</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td>Attitude towards effort</td>
+                                                    <td>Believe that effort and hard work are necessary for growth and success</td>
+                                                    <td>Believe that success is primarily due to innate ability and that effort is not as important</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td>Attitude towards feedback and criticism</td>
+                                                    <td>Welcome feedback and criticism as a way to improve and grow</td>
+                                                    <td>Avoid feedback and criticism, as it threatens their sense of competence</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td>Attitude towards the success of others</td>
+                                                    <td>Celebrate the success of others and use it as a source of inspiration and motivation</td>
+                                                    <td>Feel threatened by the success of others and see it as a reflection of their own inadequacy</td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            <p align="justify">
+                                                The main difference between a growth mindset and a fixed mindset is their beliefs about the nature of intelligence and abilities, and their attitudes towards effort, learning, and challenges.
+                                            </p>
+                                        </div>
                                     </div>
                         
                                         <button class="btn btn-primary" data-bs-dismiss="modal">
