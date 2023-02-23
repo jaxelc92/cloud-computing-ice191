@@ -14,7 +14,10 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="styles.css" rel="stylesheet" />
+        <link href="styles.css" rel="stylesheet"/>
+        <!-- JQuery modal scripts -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -65,31 +68,45 @@
                 <!-- Assignments Grid Items-->
                 <div class="row justify-content-center">
                     <!-- Assignments Item 1-->
-                    <div class="col-md-6 col-lg-3 mb-5">
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="page-section-heading text-uppercase text-center text-secondary mb-3"><b>#1</b></div>
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-1 fa-3x"></i></div>
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-bars fa-2x"></i></div>
                             </div>
                             <img class="img-fluid" src="assets/img/portfolio/assignment_icon.png" alt="..." />
                         </div>
                     </div>
                     <!-- Assignments Item 2-->
-                    <div class="col-md-6 col-lg-3 mb-5">
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="page-section-heading text-uppercase text-center text-secondary mb-3"><b>#2</b></div>
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal2">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-2 fa-3x"></i></div>
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-bars fa-2x"></i></div>
                             </div>
                             <img class="img-fluid" src="assets/img/portfolio/assignment_icon.png" alt="..." />
                         </div>
                     </div>
                     <!-- Assignments Item 3-->
-                    <div class="col-md-6 col-lg-3 mb-5">
-                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal3">
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="page-section-heading text-uppercase text-center text-secondary mb-3"><b>#3</b></div>
+                        <div class="portfolio-item mx-auto li-modal" data-bs-toggle="modal" data-bs-target="#portfolioModal3">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-3 fa-3x"></i></div>
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-bars fa-2x"></i></div>
                             </div>
                             <img class="img-fluid" src="assets/img/portfolio/assignment_icon.png" alt="..." />
                         </div>
+                    </div>
+
+                    <!-- Assignments Item 4-->
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="page-section-heading text-uppercase text-center text-secondary mb-3"><b>#4</b></div>
+                        <a href="a4.html" class="portfolio-item mx-auto modal4">
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-bars fa-2x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="/assets/img/portfolio/assignment_icon.png" alt="..." />
+                        </a>
                     </div>
 
                 </div>
@@ -120,6 +137,7 @@
                 </div> -->
             </div>
         </section>
+
         <!-- Project Section-->
         <section class="page-section" id="project">
             <div class="container">
@@ -136,6 +154,7 @@
                 </p>
             </div>
         </section>
+
         <!-- Footer-->
         <footer class="footer text-center">
             <div class="container">
@@ -167,11 +186,14 @@
                 </div>
             </div>
         </footer>
+
         <!-- Copyright Section-->
         <div class="copyright py-4 text-center text-white">
             <div class="container"><small>Copyright &copy; Jaxel 2023</small></div>
         </div>
+        
         <!-- Portfolio Modals-->
+
         <!-- Portfolio Modal 1-->
         <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" aria-labelledby="portfolioModal1" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -208,6 +230,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Assignment Modal 2-->
         <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" aria-labelledby="portfolioModal2" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -388,9 +411,9 @@
                                     <!-- Accordion -->
                                     <div class="accordion-body">
                                         <!-- Accordion item 1 -->
-                                            <button  class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q1" aria-expanded="false">
-                                                Create a CloudFront distribution for your website.
-                                            </button>
+                                        <button  class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q1" aria-expanded="false">
+                                            Create a CloudFront distribution for your website.
+                                        </button>
                                         <div id="assignment-q1" class="collapse mb-5">
                                             <p align="justify">
                                                 To crete a CloudFront distribution, an Amazon AWS valid account is needed and credentials need to be configured for that account. For more information on this, visit <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html">Quick setup guide.</a>
@@ -558,29 +581,31 @@
                                         <button class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q2" aria-expanded="false">
                                             Update your DNS Record to route to the CloudFront end point.
                                         </button>
-                                        <div id="assignment-q2" class="collapse mb-5"><p align="justify">
-                                            After creating the distribution, to update the DNS Record to route to the CloudFront distribution endpoint, we need to go and change the Route53 settings and change the Resource Record Sets to route traffic to the distribution instead of the S3 buckets.
-                                            This Record Set is a CNAME type because we are routing traffic from a domain name to another domain so when viewers make HTTP requests, the are sent to the distribution domain name instead of directly to the S3 bucket, so they will be redirected to their closest edge location and then access through your distribution domain, to the website. <br>
-                                            <b>S3 Buckets have fixed location because they are created whithin a region. Edge Locations help viewers to access the website through a distribution domain so they connect to the closest to them.</b> <br>
-                                            To create the resource record, use the following command and change the value of the resource record to the distribution domain name. You can check your distribution domain name by using the <code>aws cloudfront list-distribution</code> command, and look for your distribution settings
-                                            and the value of "DomainName". <br>
-                                            Update the Route53 config JSON file to change the resource record: <br>
-                                            <img src="assets/img/assignment_imgs/assignment3/route53_update_distributionDomain.png" width="100%" alt="">
-                                            In this case, my CloudFront distribution Domain Name is "d111z026qypboz.cloudfront.net" <br>
-                                            The action needs to be UPSERT, so it will update the resource record and not create a new one. UPSERT creates a new object if it doesn't exists, but if it does it updates the object.
-                                            Now use the command to change the settings on your Route53 config. <br>
-                                            Now just change the settings using the following command: <br>
-                                            <img src="assets/img/assignment_imgs/assignment3/route53_changebatch_cmd.png" width="100%" alt="">
-                                            This will update the resource record so that viewers can see the website from your CloudFront distribution, just wait for the changes to apply. The Route53 config looks something like this: <br>
-                                            <img src="assets/img/assignment_imgs/assignment3/route53_resourceRecordUpdate_cloudfront.png" width="100%" alt="">
-                                            Now you can access to your website using you desired domain name and it will redirected to your CloudFront distribution Domain Name. <br>
-                                            <br>
-                                            <b>IMPORTANT: </b> If you don't specify an Alias in your CloudFront Distribution settings file, you will get a 403 error. This is because CloudFront configured to access authorized domains, so we need to specify an Alias in the file, which will be our S3 website domain name, in order to properly access the website content. <br>
-                                            <br>
-                                            <b>NOTE:</b> As you can see, there is another resource record in the Route53 config, this is an extra step and it is necessary if you have an ACM Certificate and you want to use it in your website. <br>
-                                            As I already have an ACM Certificate, in the distribution config file there is a JSON object called <b>ViewerCertificate</b> to accept HTTPS requests by viewers, and since this distribution will be using this certificate, you need to create a new
-                                            resource record in the Route53 ResourceRecordSets for your S3 bucket. This is done by accessing the Route53 configuration file, and just create the a new resource record with ACM Certifcate's Resource Record Name and Value. <b>If you don't have an ACM Certificate, just ignore this step.</b>
-                                        </p></div>
+                                        <div id="assignment-q2" class="collapse mb-5">
+                                            <p align="justify">
+                                                After creating the distribution, to update the DNS Record to route to the CloudFront distribution endpoint, we need to go and change the Route53 settings and change the Resource Record Sets to route traffic to the distribution instead of the S3 buckets.
+                                                This Record Set is a CNAME type because we are routing traffic from a domain name to another domain so when viewers make HTTP requests, the are sent to the distribution domain name instead of directly to the S3 bucket, so they will be redirected to their closest edge location and then access through your distribution domain, to the website. <br>
+                                                <b>S3 Buckets have fixed location because they are created whithin a region. Edge Locations help viewers to access the website through a distribution domain so they connect to the closest to them.</b> <br>
+                                                To create the resource record, use the following command and change the value of the resource record to the distribution domain name. You can check your distribution domain name by using the <code>aws cloudfront list-distribution</code> command, and look for your distribution settings
+                                                and the value of "DomainName". <br>
+                                                Update the Route53 config JSON file to change the resource record: <br>
+                                                <img src="assets/img/assignment_imgs/assignment3/route53_update_distributionDomain.png" width="100%" alt="">
+                                                In this case, my CloudFront distribution Domain Name is "d111z026qypboz.cloudfront.net" <br>
+                                                The action needs to be UPSERT, so it will update the resource record and not create a new one. UPSERT creates a new object if it doesn't exists, but if it does it updates the object.
+                                                Now use the command to change the settings on your Route53 config. <br>
+                                                Now just change the settings using the following command: <br>
+                                                <img src="assets/img/assignment_imgs/assignment3/route53_changebatch_cmd.png" width="100%" alt="">
+                                                This will update the resource record so that viewers can see the website from your CloudFront distribution, just wait for the changes to apply. The Route53 config looks something like this: <br>
+                                                <img src="assets/img/assignment_imgs/assignment3/route53_resourceRecordUpdate_cloudfront.png" width="100%" alt="">
+                                                Now you can access to your website using you desired domain name and it will redirected to your CloudFront distribution Domain Name. <br>
+                                                <br>
+                                                <b>IMPORTANT: </b> If you don't specify an Alias in your CloudFront Distribution settings file, you will get a 403 error. This is because CloudFront configured to access authorized domains, so we need to specify an Alias in the file, which will be our S3 website domain name, in order to properly access the website content. <br>
+                                                <br>
+                                                <b>NOTE:</b> As you can see, there is another resource record in the Route53 config, this is an extra step and it is necessary if you have an ACM Certificate and you want to use it in your website. <br>
+                                                As I already have an ACM Certificate, in the distribution config file there is a JSON object called <b>ViewerCertificate</b> to accept HTTPS requests by viewers, and since this distribution will be using this certificate, you need to create a new
+                                                resource record in the Route53 ResourceRecordSets for your S3 bucket. This is done by accessing the Route53 configuration file, and just create the a new resource record with ACM Certifcate's Resource Record Name and Value. <b>If you don't have an ACM Certificate, just ignore this step.</b>
+                                            </p>
+                                        </div>
 
                                         <!-- Accordion item 3 -->
                                         <button class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q3" aria-expanded="false">
@@ -655,18 +680,99 @@
                                             Python Scripts:
                                         </button>
                                         <div id="assignment-q4" class="collapse">
-                                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#assignment-q4-1" aria-expanded="false" style="font-size: 20px;">
+                                            <p align="justify">
+                                                To create a script, first we need to have boto3 installed and referenced in the path of your Python interpreter.
+                                            </p>
+                                            <!-- Script 1 -->
+                                            <button class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q4-1" aria-expanded="false" style="font-size: 20px;">
                                                 Create or update a record in the Students DynamoDB table based on the id.
                                             </button>
-                                            <div id="assignment-q4-1" class="collapse mb-3">1111</div>
-                                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#assignment-q4-2" aria-expanded="false" style="font-size: 20px;">
+                                            
+                                            <div id="assignment-q4-1" class="collapse mb-3">
+                                                <p align="justify">
+                                                    <img src="assets/img/assignment_imgs/assignment3/update_create_script.png" width="100%" alt="">
+                                                </p>
+                                                <div align="justify">
+                                                    <p>First, import the Boto3 library and initializing a DynamoDB client. We then get a reference to the table named "Students" using the Table method.</p>
+                                                    <p>Next, we define the key and attributes of the item we want to create or update. In this case, the <b>id</b> will be "12345", <b>full_name</b> "Example Student", and the <b>personal_website</b> "examplestudent.cetystijuana.com".</p>
+                                                    <p>We then define the expression attribute values, which are used in the UpdateExpression to set the full_name and personal_website attributes of the item. These values are stored in a dictionary that maps placeholders to their actual values.</p>
+                                                    <p>The <b>update_item()</b> method is then called on the table object to create or update the item. This method is used becasue it edits an existing item's attributes, or adds a new item to the table if it does not already exist. This method takes the following arguments:</p>
+                                                    <ul>
+                                                    <li><strong>Key:</strong> A dictionary representing the primary key of the item to be updated. In this case, the primary key is the id attribute.</li>
+                                                    <li><strong>UpdateExpression:</strong> A string representing the update expression to be executed on the item. It can include several actions, such as SET, ADD, REMOVE, and DELETE, to modify one or more attributes of an item. 
+                                                        In this case, we're using the SET action to update the full_name and personal_website attributes with the values stored in expression_attribute_values.</li>
+                                                    <li><strong>ExpressionAttributeValues:</strong> A dictionary mapping placeholders in the UpdateExpression to their actual values.  The keys of this dictionary represent the placeholders in the UpdateExpression, and the values represent the actual values that should replace the placeholders. 
+                                                        This parameter is used to keep the UpdateExpression more readable and less cluttered by replacing hardcoded values with placeholders. This also helps to prevent syntax errors and security risks.</li>
+                                                    <li><strong>ConditionExpression:</strong> An optional string representing a condition that must be true for the update to be applied. In this case, we're using the attribute_exists function to ensure that the item with the specified id exists before attempting to update it.</li>
+                                                    </ul>
+                                                    <p>This methods has more optional arguments, but they are not necessary at this momment.</p>
+                                                    <p>The try-except block is used to catch any exceptions that may be raised by the update_item() method. If the item is successfully created or updated, the script prints a success message. If an error occurs, the script prints an error message with the details of the exception.</p>
+                                                    <p>
+                                                        In this case, the update_item() method may raise a ConditionalCheckFailedException if the condition specified in the ConditionExpression is not met. 
+                                                        Using try-except allows you to handle this specific exception in a more controlled manner, while still allowing other exceptions to propagate and be handled elsewhere in the code if necessary. <b>That's why it is better to use try-except instead of if-else.</b>
+                                                    </p>
+                                                    <p>If-else <b>does not handle exceptions</b> If an exception occurs within an if-else block, it will not be caught and handled by the block itself, but will instead propagate up the call stack until it is caught by another try-except block or until it causes the program to terminate.</p>
+                                                    <p>Try-except is good when working with external resources or APIs that may raise exceptions, as it allows you to handle those exceptions in a controlled manner and recover from errors without crashing your program.</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Script 2 -->
+                                            <button class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q4-2" aria-expanded="false" style="font-size: 20px;">
                                                 Delete a record in the Students DynamoDB table based on the id
                                             </button>
-                                            <div id="assignment-q4-2" class="collapse mb-3">2222</div>
-                                            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#assignment-q4-3" aria-expanded="false" style="font-size: 20px;">
+                                            <div id="assignment-q4-2" class="collapse mb-3">
+                                                <img src="assets/img/assignment_imgs/assignment3/delete_script.png" width="100%" alt="">
+                                                <div align="justify">
+                                                    <p>First, import the Boto3 library, which provides an API for working with DynamoDB. Then create a DynamoDB client object using the <code>boto3.client()</code> method.</p>
+                                                    <p>Then define the name of the table we want to work with (in this case, <code>Students</code>), and the value of the <code>id</code> attribute for the item we want to delete (in this case, the string '00001').</p>
+                                                    <p>Then attempt to delete the item with the specified <code>id</code> from the <code>Students</code> table, using the <code>delete_item()</code> method of the DynamoDB client object. In the <code>Key</code> dictionary that we pass to the <code>delete_item()</code> method, we use the <code>S</code> type specifier to indicate that the <code>id</code> attribute is a string.</p>
+                                                    <p>If the deletion is successful, the script outputs a success message and a response object containing information about the deleted item. If the item does not exist, the script catches the <code>ConditionalCheckFailedException</code> exception raised by the <code>delete_item()</code> method, and outputs an error message indicating that the item could not be found.</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Script 3 -->
+                                            <button class="accordion-button collapsed mb-3" data-bs-toggle="collapse" data-bs-target="#assignment-q4-3" aria-expanded="false" style="font-size: 20px;">
                                                 Find a record in the Students DynamoDB table by id
                                             </button>
-                                            <div id="assignment-q4-3" class="collapse mb-3">333</div>
+                                            <div id="assignment-q4-3" class="collapse mb-3">
+                                                <img src="assets/img/assignment_imgs/assignment3/find_dynamodb.png" width="100%" alt="">
+                                                <div align="justify">
+                                                    <ul>
+                                                        <li>
+                                                          First, need to import the <code>boto3</code> library, which provides an API for working with DynamoDB.
+                                                        </li>
+                                                        <li>
+                                                          Then, create a DynamoDB client object using the <code>boto3.client()</code> method.
+                                                        </li>
+                                                        <li>
+                                                          Next, define the name of the table we want to work with and the value of the id attribute for the item we want to find. In this case the table is named <b>'Students'</b> and the id we want to look for and get is <b>'12345'</b>
+                                                        </li>
+                                                        <li>
+                                                          Then, I use a <code>try-execept</code> block to attempt to retrieve the item with the specified id from table and to handle better the exceptions that may raise by using the <code>get_item()</code> method. 
+                                                          Call the <code>get_item()</code> method and store the response by passing the argument of the primary key that we are looking for. 
+                                                          The primary key is represented by a dictionary containing the id attribute and its value, which is specified using the <code>S</code> type specifier to indicate that the id attribute is a string.
+                                                        </li>
+                                                        <li>
+                                                          If the item exists in the table, we output the item's attributes by accessing the <code>Item</code> attribute of the response object returned by the <code>get_item()</code> method. 
+                                                          And if it doesn't, just ouput a message that the item was not found.
+                                                        </li>
+                                                        <li>
+                                                          Next, if the table or item does not exist, the script catches the appropriate exception and outputs an error message. <code>get_item()</code> can raise exceptions if the specified table or key does not exist in the DynamoDB database. If the specified key doest not exist, 
+                                                          the <code>get_item()</code> returns a response with an empty <code>'Item'</code> attribute, which can be checked in the code to determine if the item was found or not. However, if the specified table or key does not exist, 
+                                                          the <code>get_item()</code> raises an exception. In this case, <code>ResourceNotFoundException</code>and <code>DynamoDBKeyNotFound</code> are both exceptions that can be raised when using DynamoDB methods. <br>
+                                                          <code>ResourceNotFoundException</code> is raised when the requested resource (in this case, a table) cannot be found. For example, if you try to read from a table that does not exist this exception will be raised. <br>
+                                                          <code>DynamoDBKeyNotFoundError</code> is raised when the requested key (in this case, a primary key) cannot be found in the table. This usually happens when trying to retrieve an item with a primary key that does not exist in the table.
+                                                        </li>
+                                                        <li>
+                                                          Finally, if an unknown error occurs, catch the <code>Exception</code> object and output the details of the exception.
+                                                        </li>
+                                                      </ul>
+                                                      <p> 
+                                                        <b>NOTE: </b> <code>DynamoDBKeyNotFoundError</code> is a custom exception that is defined in the code and it used specifically if the key of the item is not found in the table. This is to make the code more readable and to provide a more specific error message to the user. 
+                                                        This is because <code>ResourceNotFoundException</code> is a general exception that could be raised for different reasons, such as if the table itself does not exist or if the user does not have permissions to access it. With this the code ir more clear and let the user knows that the issue is specifically related to the key, rather than some other issue with the table or the user's permissions. 
+                                                      </p>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- Accordion item 5 -->
@@ -740,11 +846,10 @@
                                         </div>
                                     </div>
                         
-                                        <button class="btn btn-primary" data-bs-dismiss="modal">
-                                            <i class="fas fa-xmark fa-fw"></i>
-                                            Close Window
-                                        </button>
-                                    </div>
+                                    <button class="btn btn-primary" data-bs-dismiss="modal">
+                                        <i class="fas fa-xmark fa-fw"></i>
+                                        Close Window
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -753,8 +858,17 @@
             </div>
         </div>
 
+        <!-- Portfolio Modal 4-->
+        <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        
         <!-- Core theme JS-->
         <script src="scripts.js"></script>
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->

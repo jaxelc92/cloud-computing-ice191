@@ -51,4 +51,10 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     });
 
+    // Function to open modal 4
+    $('.modal4').on('click', function(e){
+        e.preventDefault();
+       $('#portfolioModal4').modal('show').find('.modal-content').load($(this).attr('href'));
+      });
 });
+

@@ -11475,7 +11475,7 @@ html {
   cursor: pointer;
   position: relative;
   display: block;
-  max-width: 25rem;
+  max-width: 14rem;
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -11488,7 +11488,7 @@ html {
   background-color: rgba(50, 100, 155, 0.9);
 }
 .portfolio .portfolio-item .portfolio-item-caption:hover {
-  opacity: 0.7;
+  opacity: 0.5;
 }
 .portfolio .portfolio-item .portfolio-item-caption .portfolio-item-caption-content {
   font-size: 1.5rem;
