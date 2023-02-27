@@ -1,0 +1,696 @@
+<div class="modal-header border-0">
+    <button
+      class="btn-close"
+      type="button"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body text-center pb-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <!-- Portfolio Modal - Title-->
+          <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">
+            Assignment 5
+          </h2>
+          <!-- Icon Divider-->
+          <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+          </div>
+          <!-- Portfolio Modal - Image-->
+          <!-- Portfolio Modal - Text-->
+          <!-- Accordion -->
+          <div class="accordion-body">
+            <!-- Accordion item 1 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q1"
+              aria-expanded="false"
+            >
+              1. Throttling in APIs.
+            </button>
+            <div id="assignment-q1" class="collapse mb-3">
+              <div align="justify">
+                <p>
+                  Throttling is a feature implemented by an API provider that limits the number of requests that can be made to an API within a certain period of time.
+                  The main purpose of throttling is to control the excessive usge of an API to avoid any issue. For example servoce disruptions or slow performance. <br>
+                  A simple example of see throttling in an API could be by limiting the of requests to it, let's say 100 requests per minute, if a user exceeds this limit, 
+                  the API wil respond with an error message or temporarily blocking the user's access to the API. <br>
+                </p>
+                <p>
+                  <b>How Throttling works</b><br>
+                  In general, Throttling limits API requests within a certain period of time, this helps to monitor and controlo de flow of incoming requests. Let's explain 
+                  in detail how to implement throttling and how it works:
+                  <ol>
+                    <!-- throttling step 1 -->
+                    <li> 
+                      <b>First, need to define a Throttling Policy</b>
+                      This is the first step, this involves on how many requests you want to allow per client, per time interval, for example 100 requests per minute. 
+                      Then, need to choose a throttling algorithm. There are several algorithms to choose that depend on the specific use case, and requirements and constraints of the API. Here 
+                      are the most common algorithms used in throttling:
+                      <table class="table" align="margin-left">
+                        <thead>
+                          <tr>
+                            <th>Algorithm</th>
+                            <th>How it works</th>
+                            <th>Advantages</th>
+                            <th>Disadvantages</th>
+                            <th>How to implement</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Fixed Window</td>
+                            <td>Divides time into fixed intervals and tracks the number of requests made within each interval. When a request arrives, it checks whether the number of requests 
+                              made in the current interval has reached the limit. If this number has reached the limit, it rejects the request, else, it continues to allow the request, and then updates 
+                              the request count for the current interval.
+                            </td>
+                            <td>
+                              <ul>
+                                <li>Simple and easy to implement.</li>
+                                <li>Easy monitoring on the limit of requests that are allowed.</li>
+                                <li>Limits can be ajusted easily.</li>
+                                <li>Effective in preventing overloading of a server or service</li>
+                              </ul>
+                            </td>
+                            <td>
+                              <ul>
+                                <li>Can result in bursts of requests.</li>
+                                <li>Low flexibility because the limit is fixed for each time interval and cannot be dynamically ajusted based on the traffic level</li>
+                                <li>Less effective in preventing DDos attacks (Distributed denial-of-services attaks)</li>
+                              </ul>
+                            </td>
+                            <td>Determine the time interval for the limit of requests, keep track of request count for each interval, reject requests that exceed the limit and reset the request counter 
+                              at the beginning of each interval.
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Rolling Window</td>
+                            <td>Tracks the number of requests made in a sliding window of time. When the request arrives, checks whether the number of request made in the sliding window has reached the limit. 
+                              If it has, it rejects the request, else, it allows the request and updates the request count for the sliding windows.</td>
+                            <td>
+                              <ul>
+                                <li>More flexible than fixed window.</li>
+                                <li>Can smooth out bursts of requests./li>
+                                <li>Effective in preventing overloading</li>
+                              </ul>
+                            </td>
+                            <td>
+                              <ul>
+                                <li>Can be more complex to implement.</li>
+                                <li>More computationally expensive. It calculates amount of requests each interval of time</li>
+                                <li>Less effective in preventing DDos attacks (Distributed denial-of-services attacks)</li>
+                              </ul>
+                            </td>
+                            <td>Keep track of request count for the sliding window and reject requests that exceed the limit.</td>
+                          </tr>
+                          <tr>
+                            <td>Token Bucket</td>
+                            <td>Maintains a bucket of tokens, where each token represents the permission to make one request. Removes a token from the bucket for each allowed request.</td>
+                            <td>
+                              <ul>
+                                <li>Flexible over the rate of incoming requests</li>
+                                <li>Effective in preventing overloading.</li>
+                                <li>Scalable than other algorithms</li>
+                                <li>Can handle large numbers of concurrent requests</li>
+                              </ul>
+                            </td>
+                            <td>
+                              <ul>
+                                <li>Complex implementation.</li>
+                                <li>Can result in bursts of requests if the bucket fills up.</li>
+                                <li>Less effective in preventing DDos attacks (Distributed denial-of-services attacks)</li>
+                                <li>Lack of resources lead to bad performance and scalability</li>
+                              </ul>
+                            </td>
+                            <td>Maintain a token bucket and remove a token for each allowed request.</td>
+                          </tr>
+                          <tr>
+                            <td>Leaky Bucket</td>
+                            <td>Maintains a bucket of tokens, where each token represents the permission to make one request. Adds tokens to the bucket at a fixed rate and discards excess tokens. Removes a token from the bucket for each allowed request.</td>
+                            <td>
+                              <ul>
+                                <li>Provides a more fine-grained control over the rate of requests. Can smooth out bursts of requests.</li>
+                                <li>Effective in preventing overloading</li>
+                                <li>Simpler to implement than token bucket</li>
+                                <li>Effective in preventing DDos attacks (Distributed denial-of-services attacks)</li>
+                              </ul>
+                            </td>
+                            <td>
+                              <ul>
+                                <li>Complex implementation</li>
+                                <li>Low flexibility</li>
+                                <li>Lack of resources lead to bad performance and scalability</li>
+                                <li>Less effective for large incoming requests</li>
+                              </ul>
+                            </td>
+                            <td>Maintain a token bucket and add tokens at a fixed rate. Remove a token for each allowed request. Discard excess tokens.</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <b>NOTE:</b> Things to consider: <br>
+                      <b>Tokens</b>: API tokens are uni identifiers that are issued to each client making request to the API. The tokens are used to track the rate of requests and enforce the throttling policy on a per-client basis. This enables the API provider to 
+                      distinguish between different clients and apply different throttling rules based on their usage patterns. <b>To implement throttling on a per-client basis</b>, the rate limiter associates each request with a unique API token that identifies the 
+                      client that makes the request. The rate limiter then tracks the number of requests made by each token and applies the throttling policy accordingly. <br> <br>
+                      These algorithms are the most common used for throttling, however, there are several more that can be used depending on the specific case and requirements and constraints of the API. Other algorithms: <b>Fixed token bucket, Dynamic Window, Weighted 
+                        Round Robin, Priority Queue, Adaptative Throttling.</b> For more details on other throttling algorithms, you can visit:
+                      <a href="https://www.alibabacloud.com/blog/throttling-solutions-in-standalone-and-distributed-scenarios_596984">Throttling Solutions in Standalone and Distributed Scenarios</a>
+                    </li>
+                    <!-- step 2 -->
+                    <li>
+                      After having defined the throttling policy, the next step is to <b>identify your clients</b>, as mention in the API tokens, to implement throttling on a per-client basis, we need to identify each client making requests to the API. We can do this 
+                      by requiring clients to include an API token in their requests, which will be used to track their usage. Again, <b>API tokens</b> are unique identifiers for each client to track the rate of requests they made and this enforces the throttling 
+                      policy for each type of client. This helps the API to distinguish between different clients and apply different throttling rules based on their usage patterns.
+                    </li>
+                    <!-- step 3 -->
+                    <li>
+                      The next step is to <b>Track request rates</b>. Once clients have been identified, we need to track the rate of the requests they're making. This involves storing data about each request, suchh as the client ID, timestamp, and request count. 
+                      Here is an example of how to track the request rates: <br>
+                      <b>Using fixed window throttling algorithm:</b> Let's say we are aloowing for a rate limit of 100 requests per minute, to track the request rates, we can use data structures like <code>hash table</code> or a <code>dictionary</code> to map a timestamp 
+                      to the number of requests made at a time. For example, this pseudocode: <br>
+                      <code>
+                        request_rate = {} <br>
+                        while True: <span style="color:darkgreen">#loop through incoming requests </span> <br>
+                        &nbsp;current_time = time <span style="color:darkgreen">#check current time</span><br>
+                        &nbsp;if current_time in request_rate and request_rate[current_time] >= 100:<br>
+                        &nbsp;&nbsp;print("Request rate limit reached")<br>
+                        &nbsp;&nbsp;break <span style="color:darkgreen">#finish the loop</span><br>
+                        &nbsp;else: <span style="color:darkgreen">#if limit not reached, handle the request</span><br>
+                        &nbsp;<span style="color:darkgreen">#we add the current request to the request rate dictionary</span><br>
+                        &nbsp;if current_time not in request_rate:<br>
+                        &nbsp;&nbsp;request_rate[current_time] = 1<br>
+                        &nbsp;else:<br>
+                        &nbsp;&nbsp;request_rate[current_time] += 1<br>
+                        &nbsp;<span style="color:darkgreen">#Remove old timestamps from the request rate dictionary</span><br>
+                        &nbsp;for timestamp in request_rate.key:<br>
+                        &nbsp;&nbsp;if timestamp < current_time - 60: <br>
+                        &nbsp;&nbsp;&nbsp;delete request_rate[timestamp] <br>
+                        &nbsp;<span style="color:darkgreen">#wait for the next request</span>
+                        &nbsp;time.sleep(0.1)
+                      </code><br> <br>
+                      The dictionary will keep track of the number of requests made at each timestamp. The <code>current_time</code> will calculate the current timestamp, which is then checked with <code>request_rate</code> the to see if the request rate limit has been reached. 
+                      If the limit has been reached, will print an error message. If the request rate is within the limit, the request is proccessed and added to the dictionary. Then any old timestamps are removed fomr the dictionary to keep it up to date and finally we wait for 
+                      the next incoming request. This may be a very simple example but it gives a better understanding on how to track request rates.
+                    </li>
+                    <!-- step 4 -->
+                    <li>
+                      Having tracked the request rates, now we need to <b>apple the throttling algorithm</b> we selected before. Using the data collected, we now can apply our chosen algorithm to determine wheter to allow or reject incoming requests. As mentioned earlier, the most 
+                      common throttling algorithms are: <b>Fixed Window, Rolling Window, Token Bucket, Leaky Bucket</b>. Also within these algorithms, the most common are Fixed Window and Rolling Window.
+                    </li>
+                    <li>
+                      After applying our throttling algorithm, we need to track and <b>return error messages</b> to the client. This error message should include a status code (for example, 429 To Many Requests), a message exaplaining the reason for the throttling, and a Retry-After 
+                      header indicating the amount of time the client needs to wait before making another request. <br>
+                      <b>NOTE:</b> <code>Retry-After Header</code> is an HTTP response header that indicates how long the client should wait before making another request to the same endpoint after receiving a 429 (Too Many Requests) response status code. This header can contain either 
+                      a date/time value or a number of seconds. This helps the client to throttle its own request and avoid reaching the rate limit again. <em>Also, this header is a suggestion and clients may choose to ignore it.</em>
+                    </li>
+                    <!-- step 6 -->
+                    <li>
+                      Finally, we need to keep <b>monitoring our API</b> to ensure that the throttling policy is working as expected. Also, monitoring the server logs are is good to track the rate of incoming requests, the amount of requests that are being throttled, and the amount of 
+                      error messasges that are being returned to the clients. There are a few tools that can be used for monitoring the APIs, such as <b>Prometeus, Grafana, Datadog, New Relic, Pingdom, Postman</b> among others. <br>
+                    </li>
+                  </ol>
+                </p>
+              </div>
+            </div>
+  
+            <!-- Accordion item 2 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q2"
+              aria-expanded="false"
+            >
+              2. Pagination in APIs.
+            </button>
+            <div id="assignment-q2" class="collapse mb-3">
+              <div align="justify">
+                <p>Refers to the proccess of dividing a large set of date into smaller, more manageable pieces, or pages. It is a common technique used to return large amounts of data, such as search results or data base queries, to improve performance and 
+                  reduce the amount of data that is sent over the network. <br>
+                  With this technique, an API client can requeste a specidif page of results instead of receiving all of the data. The API returns a fixed number of results per page, and the client can use query parameters to specify which page of results to retrieve. 
+                  The basic idea with pagination is to divide the data into smaller chunks or pages, with each page displying a limited number of items. Then, the user can navigate through the pages using buttons, links, or other control elements.
+                </p>
+                <p>
+                  <b>How Pagination Works</b> <br>
+                  When a client makes a request to an API endpoint that supports pagination, the API server will typically respond with a subset of the total results. This response can include metadata about the results, such as the total number of pages, the number 
+                  of items per page, and the current page number. As this may sound simple, pagination can be a bit complex to implement, let's break down on how to implement a simple but functionaly and user-friendly pagination system:
+                  <ol>
+                  <!-- Pagination implementation -->
+                    <!-- step 1 -->
+                    <li>
+                      <b>Determine the size of a each page</b><br>
+                      The first step is to decide how many items will be displayed on each of the pages. This depends on the amount of data that we are working with and the layout, or views, of our website or application that we want to apply pagination into. Generally 
+                      the best option here is to keep the number of items per page between 10 and 50. This is recommended reasons like:
+                      <ul>
+                        <li>Reducing Page load time</li>
+                        <li>Reduce the amount of scrolling made by the user</li>
+                        <li>Reduce data loading</li>
+                        <li>Improve navigation</li>
+                      </ul><br>
+                    </li>
+                    <!-- step 2 -->
+                    <li>
+                      <b>Calculate the total number of pages</b><br>
+                      Next, we need to calculate the total number of pages based on the total number of items and the page size. We can do this by dividing the total number of items by the page size and rounding up to the nearest whole number. For example, if we have 100 items 
+                      and we want to display 20 items per page, we can divide those items into 5 pages.
+                    </li><br>
+                    <li>
+                      <!-- step 3 -->
+                      <b>Determine the current page</b><br>
+                      Next, we need to determine which page the user is currently viewing. This can be done using <code>query parameters</code> in the URL, for example: <code>?page=2</code>. If the query parameters are not present, we can assume that the user is in the home page, 
+                      or first page.
+                    </li><br>
+                    <li>
+                      <!-- step 4 -->
+                      <b>Retrieve the data for the current page</b><br>
+                      Once we know which page the user is viewing, we can retrieve the data for that page from the database or other data source we are using. A way to do this, is by using SQL query or other data base language. This query should be specific to only retrieve the 
+                      data needed for the current page, based on the page size the current page number. For example: <br>
+                      Let's say that we have an SQL database table, let's called <code>products</code> and this table contains a list of all products, now we want to display <b>10 products</b> per page, and we are at <b>page 3</b>. We can write a query to retrieve the data for the current page like this: <br>
+                      <code>
+                        SELECT *
+                        FROM products
+                        ORDER BY id
+                        LIMIT 10 OFFSET 20 
+                      </code><br>
+                      Here, we are selecting to retrieve a maximum of 10 rows from the <code>products</code> table, and specifying <code>OFFSET 20</code> will skip the first 20 rows. So this means that the query will return the 10 products starting fomr the 21st product in the table, which 
+                      means that this will correspond to the third page.
+                    </li><br>
+                    <!-- step 5 -->
+                    <li>
+                      <b>Display the data on the page</b><br>
+                      Once we have retrieved the data for the current page, now we can display it on the page using HTML and CSS. For this, we will need to have a container for the data, and then iterate through this data to display each item from the container. Additionally, we will need some 
+                      pagination controls to allow the user to navigate to other pages. These pagination controls can be implemented using buttons, links, etc. <br>
+                      For example, if we want to display the items from the <code>products</code> table from the previous example, we can use a front-end framework or server-side template engine or langage, such as PHP, Ruby or TypeScript, using a loop that iterates over each product and display its details, like this: <br>
+                      <img src="assets\img\assignment_imgs\assignment4\q2_step5.png" width="100%" alt="">
+                      Here, <code>products</code> contains an array of 10 product objects that were retrieved from the database. The loop iterates over each product in the array and display its name, description, and price in a HTML <code>div</code> element.
+                    </li>
+                    <!-- step 6 -->
+                    <li>
+                      <b>Add pagination controls</b><br>
+                      Finally, after displaying the data on the page, we need to add some pagination controls to allow the user to navigate to other pages. We can do this using links, buttons, or other controls, and this will depend on the design of our website or application. It's important to include 
+                      this controls to the previous and next pages, as well as links to individual pages. We can also include links, or buttons, to navigate to the first and last pages, no matter in what page the users is currently at.
+                    </li>
+                  </ol>
+                </p>
+                <p>
+                  Following these simple steps can help us to create a simple but functional and user-friendly pagination system. <br>
+                  Here is an example to implement pagination using JavaScript and Fetch API method: <br>
+                  Let's say that we have an API endpoint that returns a list of items and we want to display 10 items per page.
+                  <ol>
+                    <li>
+                      <b>Create an HTML for displaying the items.</b> This can be done with some like this: <br>
+                      <code>&lt;ul id="items"&gt;&lt;/ul&gt;</code><br>
+                    </li>
+                    <li>
+                      <b>Retrieve the total number of items:</b> We make a request to the API enpoint to retrieve the total number of items by inspecting the <code>X-Total-Count</code> header which contains the total number of items available from the API: <br>
+                      <img src="assets\img\assignment_imgs\assignment4\q2_example1.png" width="100%" alt="">
+                      Here, we are making a request to the example API endpoint and retrieving the <code>X-Total-Count</code> header from the response. Then calculate the total number of pages by dividing the count by the number of items per page, in this case 10.
+                    </li>
+                    <li>
+                      <b>Create pagination links:</b> Allow the user to nagivate between pages. This links can be buttons, links, or any other clickable element that triggers a page change event. <br>
+                      <img src="assets\img\assignment_imgs\assignment4\q2_example2.png" width="100%" alt="">
+                      Here, we create a <code>div</code> element with a class of <code>pagination</code> and add a button for each page. Also, we're adding an event listener to each button that triggers a page change event.
+                    </li>
+                    <li>
+                      <b>Fecth data for the selected page:</b> Make a request to the API endpint with a <code>page</code> query parameter that specifies the page number. Then update the HTML with the new data. <br>
+                      <img src="assets\img\assignment_imgs\assignment4\q2_example3.png" width="100%" alt="">
+                      The <code>fetchData</code> function takes a <code>page</code> parameter and makes a request to the example API endpoint with the specified page number. Then the HTML is updated with new data by creating a <code>li</code> element for each item 
+                      and appending it to a <code>items</code> list. Finally, we call the <code>fetchData</code> with a default number of 1 to fetch and display the data for the first page <br>
+                      This is how the implementation will look like: <br>
+                      c
+                    </li>
+                  </ol>
+                </p>
+              </div>
+            </div>
+  
+            <!-- Accordion item 3 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q3"
+              aria-expanded="false"
+            >
+              3. Callback functions.
+            </button>
+            <div id="assignment-q3" class="collapse mb-3">
+              <div align="justify">
+                <p>
+                  Callback functions are functions that are passed as an argument to another function and are invoked when a certain event or condition occurs. The main purpose of a callback function is to enable asynchronous behavior in programs and applications.
+                </p>
+                <p>
+                  When we pass a call function to a function, we are telling that function to execute the callback function once it has completed its own processing. This allows the code, or application, to continue executing while the first function 
+                  performs its task, and then execute the callback function once the task is completed. For example, when a function accepts a callback function, it may perform some long-running task, such as making an AJAX request or processing a large amount of data, 
+                  and then call the callback function when it has completed its task. <br>
+                  <b>NOTE:</b> AJAX (Asynchronous JavaScript and XML) is a technique used in web development to send and receive data asynchronously between a web server and a web page without reloading the entire page. This kind of requests are typically in JSON or XML format. <br>
+                  This technique allows web pages to update dynamically and asynchronously, which can provide a more seamless and responsive user experience. AJAX requests are commonly used for tasks such as <b>updating</b> a chat window, <b>displaying</b> search result as the 
+                  user types, or <b>retrieving</b> data from a server for display on a web page. In this type of requests, JavaScript code makes a request to the server using the <code>XMLHttpRequest</code> object or a fecth API. The server responds with data in a format of <code>JSON</code> 
+                  or <code>XML</code>, which then can be used to update the web page. For example: <br>
+                  <img src="assets\img\assignment_imgs\assignment4\q3_example1.png" width="100%" alt="">
+                  Here, the <code>xhr</code> object is used to make a <code>GET</code> request to the <code>/data</code> URL. When the response is received, the <code>onload</code> callback function is executed to handle the response. If the response is sucessful (status code 200), the response 
+                  is parsed as JSON and used to update the webpage.
+                </p>
+                <p>
+                  Another way to use callback functions is to make an AJAX request using <code>async/await</code> in JavaScript. For example:
+                  <img src="assets\img\assignment_imgs\assignment4\q3_example2.png" width="100%" alt="">
+                  In this example, <code>getData()</code> is function declared as an asynchronous function. Within the function, the <code>fecth()</code> method is used to make a GET request to the <code>/data</code> URL. The <code>await</code> is used to wait for the response 
+                  to be received before continuing execution. <br>
+                  If the response is successful (status code 200), the response data is parsed as JSON using the <code>json()</code> method and used to update the web page. If the response is not successful, an error is thrown and caught in the <code>catch</code> block. <br>
+                  Using this kind of syntax can make handling AJAX requests more concise and easier to read by avoiding the need for nested callback functions. 
+                </p>
+                <p>
+                  Even if those methods are useful to make AJAX requests using callback funcionts, <code>async/await</code> and <code>open()</code> serve different purposes, so it's possible to say that we can not make a direct comparison between them. However, there are key points from each one 
+                  that we can mention. <br>
+                  <ul>
+                    <li><code>open()</code> is a method of the <b>XMLHttpRequest</b> object that is used to set up a request. This method generally used with HTTP methods such as <code>GET or POST</code>, a URL and a optional request header. This method doest not involve handling the response data, 
+                    which is typically through event handlers like <code>onload</code> and <code>onerror</code>.</li>
+                    <li>
+                      <code>async/await</code> is a syntax for working with promises, that allows for more concise and readable code. <br>
+                      <b>A promise</b> is an object that represent the eventual completion (or failure) of an asynchronous operation and its resulting value. This allows to write asynchronous code in a more redeable and maintainable way by providing a standard way to handle asynchronous operations and their results. <br>
+                      These promises have 3 states:
+                      <ul>
+                        <li><b>Pending:</b> The initial state of a promise before is has settled.</li>
+                        <li><b>Resolved:</b> The state of a promise when the asynchronous operation has completed successfully, resulting in a value.</li>
+                        <li><b>Rejected:</b> The state of a promise when the asynchronous operation has failed, resulting in an error.</li>
+                      </ul>
+                      A promise is created by calling the <code>Promise</code> constructor with a function argument that takes two parameters: <code>resolve</code> and <code>reject</code>. These functions are use to settle the promise by either resolving it with a value or rejecting it with an error. <br>
+                      Here is a simple example of a promise:
+                      <img src="assets\img\assignment_imgs\assignment4\q3_example3.png" width="100%" alt="">
+                      <code>myPromise</code> object will do some asynchronous operation and settles with either a value or an error.
+                    </li>
+                  </ul>
+                </p>
+                <p>
+                  Here are some key advantages and disadvantages when using callback functions:
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Advantages</th>
+                        <th>Disadvantages</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Callbacks allow for asynchronous operations, which can improve the performance and user experience of web applications.</td>
+                        <td>Callbacks can lead to "callback hell," which is when there are too many nested callbacks, making the code difficult to read and maintain.</td>
+                      </tr>
+                      <tr>
+                        <td>Callbacks can be used to pass data between functions, allowing for more flexible and modular code.</td>
+                        <td>Callbacks can make error handling more difficult, as errors may be propagated through multiple levels of callbacks.</td>
+                      </tr>
+                      <tr>
+                        <td>Callbacks can be used to handle events, such as button clicks or form submissions.</td>
+                        <td>Callbacks can be prone to bugs, such as race conditions or memory leaks, if not used properly.</td>
+                      </tr>
+                      <tr>
+                        <td>Callbacks can be used to implement higher-order functions, which are functions that take other functions as arguments.</td>
+                        <td>Callbacks can be hard to debug, as errors may not be caught until runtime.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </p>
+              </div>
+            </div>
+  
+            <!-- Accordion item 4 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q4"
+              aria-expanded="false"
+            >
+              4. Cold start in AWS Lambda.
+            </button>
+            <div id="assignment-q4" class="collapse mb-3">
+              <div align="justify">
+                <p>
+                  <b>What is Lambda?</b><br>
+                  AWS Lambda is a compute service that lets you run code without provisioning or managing servers. Lambda runs your code on a compute infrastructure and performs all of the administration of the compute resources, including server and operating system maintenance, capacity provisioning and automatic scaling, and logging. 
+                  With Lambda, you can run code for virtually any type of application or backend service. To see a list of the languages that Lambda supports, visit <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">Lambda runtimes</a>.
+                </p>
+                <p>
+                  AWS Lambda is serverless, this means is a <b>function-as-a-service (FaaS)</b> platform that enables us to write code and execute it in response to events such as HTTP requests, changes of data in a database, or messages from a queue. <br>
+                  When using Lambda using one of the supported langauges, we upload the code as a deployment package. Then we can configure a trigger that will invoke the function in response to specific events. When the trigger occurs, AWS Lambda automatically provisions a new 
+                  execution environment to run the code, and the executes the function.
+                </p>
+                <p>
+                  As mentioned, when Lambda needs to execute a function and there is no existing execution environment available to handle the request, a brand-new request, it creates a new one. The process of creating a new execution environment involves in downloading and unpacking 
+                  the development package, loading all the necessary dependencies, and then initializing the runtime environment. This process can take several seconds to complete, this depends on the size and complexity of the code and its dependencies. This delay of executing for the first time is know as <b>cold start</b>.
+                </p>
+                <p>
+                  Cold starts are very common in serverless architechtures, even though they can have an impact on the performance of the application we are working on, there are a few things we can keep in mind to minimize this impact:
+                  <ul>
+                    <li><b>Try to minimize the size of the deployment package and its dependencies</b></li>
+                    <li>
+                      <b>Use warm-up functions:</b> These are small functions that could don't any useful work, but executes the initialization logic needed to keep the execution environment warm. In other words, they keep the execution environment initialized and ready to handle requests. 
+                      For example, a small function that logs a message to indicate that it is starting, initialized any task to warm-up the environment, such as loading dependencies, and then logs a message to indicate that it has completed.
+                    </li>
+                    <li><b>Use load balancers</b>, or any other mechanism to distribute requests evenly across multiple execution environments.</li>
+                  </ul>
+                </p>
+                <p>
+                  Also, Cold starts can occur because of several reasons besides a new deployment, here are the most common of them:
+                  <ul>
+                    <li><b>Scaling Out:</b> When AWS Lambda needs to scale up to handle a sudden increase in traffic, so it automatically increases the number of concurrent execution environments available to handle incoming requests.</li>
+                    <li><b>Idle execution environment:</b> When an execution environment has been idle for a period of time and is shut down by AWS Lambda to save resources, so when a new request arrives, AWS Lambda will create a new environment and trigger a cold start.</li>
+                  </ul>
+                </p>
+                <p>
+                  Additionally to the size and complexity of the of the code and its dependencies, cold starts can also depend on the amount of memory allocated to the function and the frequency of requests. <br>
+                  When a new execution environment is needed to handle a request, AWS Lambda needs to allocate resources, such as CPU, memory, and network, to create the new execution environment. The amount of memory allocated to the function can affect how long it takes for AWS Lambda to allocate the neccesary resources to create the environmet. 
+                  For example, when a function receives a request, AWS Lambda creates a new environment to handle the request, depending on the amount of memory allocated to the function, it will determine the amount of CPU and network resources. <br>
+                  Imagine a function that performs intensive computational operations, such as image or video rendering, this may require more CPU to complete its work. If we don't have enough memory allocated, this operations will take longer to perform.
+                </p>
+                <p>
+                  However, allocating too much memory can also have negative effects. If a function is not using all of the allocated memory, AWS Lambda may not be able to efficiently allocate resources to the function, which can result in higher cold start times. Additionally, and more important, when we allocate more memory to a function 
+                  AWS Lambda charges more per request, so nope. <br> <br>
+                  Additionally, the frequency of requests can also affect the likelihood of cold starts. This means that if a function is not being used correctly, or has a lower frequency rate of requests, AWS Lambda may shut down the idle execution environment to save resources, as mentioned earlier. 
+                  On the other hand, if a function has a high frequency rate of requests, AWS Lambda is more likely to consider the environment as <em>warm</em>, which will reduce the posibility of cold starts.
+                </p>
+              </div>
+            </div>
+  
+            <!-- Accordion item 5 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q5"
+              aria-expanded="false"
+            >
+              5. HTTP methods.
+            </button>
+            <div id="assignment-q5" class="collapse mb-3">
+              <div align="justify">
+                <p>
+                  <b>HTTP (Hypertext Transfer Protocol)</b> is an application protocol that is used to transfer data over the World Wide Web. It is the foundation of data communication on the internet and is responsible for the transfer of web pages, images, videos, and other resources between servers and clients.
+                </p>
+                <p>
+                  HTTP defines a set of request methods to indicate the desired action to be performed for a given resource. Each of them implements a different semantic, but some common features are shared by them, meaning that they some of them are safe, idempotent, or cacheable.
+                </p>
+                <p>
+                  HTTP methods are used to specify the type of action to be perform on a resource on the web server. As for today, there are 9 standart HTTP methods:
+                  <ul>
+                    <li><b>GET:</b> This method is used to retrieve a resource from the server such as web pages, images, or videos. It is the most commonly used HTTP method and <code>GET requests</code> can be cached by the browser, so this can be faster than other methods. 
+                      However, <code>GET requests</code> are not secure for sending sensitive data as they can be easily intercepted.</li>
+                    <li><b>POST:</b> This method is used to submit data to the server to be processed. It is used to send form data, upload files, etc. to the server. <code>POST requests</code> are <b>NOT</b> cached, so they are slower than GET. 
+                    However, <code>POST requests</code> are more secure than GET requests for sending sensitive data as the data is sent in the request body, not the URL.</li>
+                    <li><b>PUT:</b> This method is used to update an existing resource on the server. It is used to replace an existing resource with a new one. <code>PUT requests</code> are <b>idempotent</b> meaning that if you send the same request multiple times, the result will be the same each time. 
+                    This makes it easy to retry failed requests.</li>
+                    <li><b>DELETE:</b> This method is used to delete a resource on the server. <code>DELETE requests</code> are also <b>idempotent</b>, so you can safely retry failed requests.</li>
+                    <li><b>HEAD:</b> This method is similar to the GET method, but it only retrieves the headers of the resource, not the actual resource. This can be useful for checking if a resource exists or if it has been modified without downloading the entire resource.</li>
+                    <li><b>OPTIONS:</b> This method is used to retrieve the supported HTTP methods for a resource on the server. This can be useful for discovering what actions are available for a resource.</li>
+                    <li><b>CONNECT:</b> This method is used to establish a network connection to a server over HTTPS (HTTP over SSL) or TLS (Transport Layer Security). This is typically used for secure connections to a proxy server.</li>
+                    <li><b>TRACE:</b> This method is used to retrieve a diagnostic trace of the requests and responses between the client and the server. This can be useful for debugging.</li>
+                    <li><b>PATCH:</b> This The PATCH method is used to partially update an existing resource on the server. <code>PATCH requests</code> can be used to update only part of a resource, rather than replacing the entire resource</li>
+                  </ul>
+                  <b>IMPORTANT:</b> Not all web servers and applications support all HTTP methods. Some methods such as <code>CONNECT</code> and <code>TRACE</code> are often disabled for security reasons. <br>
+                  <code>CONNECT</code> can be used to bypass firewalls and other security measures. For example, an attacker can request to create a tunnel through a firewall and use the tunnel to launch attacks on internal systems. <br>
+                  <code>TRACE</code> can be used in certain types of attacks, such as <b>cross-site</b> scripting (XSS) attacks. In this type of attacks, the attacker injects malicious code into a web page that is then executed by other users who view the page. So the attacker can retrieve sensitive information, 
+                  such as authentication tokens, from the headers of a request.
+                </p>
+              </div>
+            </div>
+  
+            <!-- Accordion item 6 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q6"
+              aria-expanded="false"
+            >
+              6. How to automate a deployment of a static website to S3.
+            </button>
+            <div id="assignment-q6" class="collapse mb-3">
+              <div align="justify">
+                <p>There are several ways to automate changes for deployments to a static website on an S3 bucket. He we are going to use AWS CodePipeline approach.</p>
+                <p>
+                  <b>What is AWS CodePipeline?</b><br>
+                  AWS CodePipeline is a continuous delivery service you can use to model, visualize, and automate the steps required to release your software. You can quickly model and configure the different stages of a software release process. CodePipeline automates the steps required to release your software changes continuously. <br>
+                  As It is a <em>continou delivery</em> service, CodePipeline automates the buidling, testing and deployment of the software into production. Additionally, the concetps of <em>continious delivery</em> and <em>continious integration</em> are key concepts when working with pipelines.<br>
+                </p>
+                <p>
+                  <b>Continious delivery (CD)</b><br>
+                  It is software development practice where code changes are automatically prepared for a release to production. A pillar of modern application development, continuous delivery expands upon continuous integration by deploying all code changes to a testing environment and/or a production environment after the build stage.
+                </p>
+                <p>
+                  <b>Continious integration (CI)</b><br>
+                  It is a DevOps software development practice where developers regularly merge their code changes into a central repository, after which automated builds and tests are run. Continuous integration most often refers to the build or integration stage of the software release process and entails both an automation component 
+                  (CI or build service) and a cultural component (learning to integrate frequently). The key goals of continuous integration are to find and address bugs quicker, improve software quality, and reduce the time it takes to validate and release new software updates.
+                </p>
+                <p>To automate deployments to a website on an S3 we need to have the following:</p><br>
+                <ul>
+                  <li><b>an S3 bucket configured as a static website</b></li>
+                  <li><b>a Github repository</b></li>
+                  <li><b>an AWS CodePipeline</b></li>
+                </ul>
+                <p>
+                  At this time, we already should have an S3 bucket configured as a static website. If you don't have an S3 bucket configured as a static website, <b>go to assignments sections and look into assignment 2.</b> Or visit <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html">Creating a bucket.</a>
+                </p>
+                <p>
+                  We also need to create a github repository and make the first commit so there is something in the repository, and create an access token for the CodePipeline to have access into the repository. <br>
+                  We can create a repository going into <a href="https://github.com/">GitHub</a> or using the git-cli. In this case I already have a repesitory that I will use with CodePipeline, and the access token can be created within GitHub website under <b>yourProile\Settings\Developer settings\Personal access tokens.</b><br>
+                  The token should access full access for the Pipeline to properly perform its actions. Just give it a name and set the permissions for the token.
+                  <img src="assets\img\assignment_imgs\assignment4\q6_accesstoken1.png" width="100%" alt="">
+                </p>
+                <p>
+                  Before creating the pipeline, we need to define the settings for the pipeline configuration. This can be done by passing in a JSON file with the configuration, specifying what will the pipeline do and from where it will retrieve the data and where it will put it. <br>
+                  The JSON should look something like this:
+                  <img src="assets\img\assignment_imgs\assignment4\q6_json1.png" width="100%" alt="">
+                  <img src="assets\img\assignment_imgs\assignment4\q6_json2.png" width="100%" alt="">
+                </p>
+                <ul>
+                  <li><b>name:</b> This is the name of your pipeline, can be any string.</li>
+                  <li><b>roleArn:</b> This is the Amazon Resource Name for AWS CodePipeline to use to either perform action, or to assume roles. <b>IMPORTANT:</b> If your ARN does <b>NOT</b> have permissions over AWS CodePipeline, you will not be able to create a piple. So <b>Permissions are needed.</b></li>
+                  <li><b>artifactStore:</b> An object that represents information about the S3 bucket. Is the location where artifacts are stored for the pipeline. Here we specify the following:
+                    <ul>
+                      <li><b>type:</b> In this case, the type of for the artifacStore is going to be S3, since we are using an S3 bucket.</li>
+                      <li><b>location:</b> This is the name of the s3 bucket. According to AWS, we can specify the name of our bucket, but not a folder in the bucket.</li>
+                    </ul>
+                  </li>
+                  <li><b>stages:</b> A list of stages that the pipeline will be perfoming its actions. They represent different phases of the deployment process, such as a retrieval, building, testing and deployment to production. In this case we will have only 2 stages, <code>Source</code> and <code>Deploy</code></li>
+                  <ul>
+                    <li><b>name: </b>The name of the stage, can be any string.</li>
+                    <li><b>actions: </b>A list of actions that the pipeline will perform within this stage. He we have:
+                      <ul>
+                        <li><b>name:</b> The name of the action, this can be any string.</li>
+                        <li><b>actionTypeId:</b> This specifies the action type and the provider of the action</li>
+                        <li><b>category:</b> The name of the type of stage. Generally, the first stage of the deployment process is the Source stage, or the retrieval stage. Here we will retrieve the code from GitHub.</li>
+                        <li><b>owner, version, provider:</b> He we specify that we will retrieve the code from <code>GitHub</code>, the version is set to <code>1</code> which is the reason we created the Access Token, and the owner is set to <code>ThirdParty</code> because we are using a provider that is not part of AWS.</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <b>configuration:</b> Depending on the provider, this specifies the configuration for the pipeline to work well with the provider. Here we have the following:
+                      <ul>
+                        <li><b>Owner:</b> This is the GitHub username, in this came my GitHub username is <em>jaxelc92</em></li>
+                        <li><b>Repo:</b> The link of the repository you want the pipeline to retrieve the code from</li>
+                        <li><b>Branch:</b> The branch of repository you want to retrieve the code from.</li>
+                        <li><b>OAuthToken:</b> Here we put the <code>ACCESS_TOKEN</code> we created earlier from GitHub.</li>
+                      </ul>
+                    </li>
+                    <li><b>outputArtifacts:</b> Here specify the name of the artifact that is generated as output from this stage. <b>NOTE:</b> An artifact is a source code or configuration file that is retrieved from a version control system, in this case Git. It can be used as input for the next stage of the pipeline.</li>
+                    <li><b>runOrder:</b> This is order in which AWS CodePipeline runs the action. This means that this stage will run its action first.</li>
+                  </ul><br>
+                  The other stage that we have is the <code>Deploy</code> stage. He we will deploy the retrieved code from GitHub and put it into the S3 bucket.
+                  <li>
+                    <b>actions:</b> We will specify the actions to be a Deploy stage.
+                    <ul>
+                      <li><b>name:</b> The name of the stage, can be any string</li>
+                      <li>
+                        <b>actionTypeId:</b> Again, specify the action type and the provider of the action for this stage.
+                        <ul>
+                          <li><b>category:</b> We specify that this stage will be a <code>Deploy</code> stage.</li>
+                          <li><b>owner:</b> In this case, we will depploy our code into an S3 bucket, which is part of AWS, so we set the owner to AWS.</li>
+                          <li><b>version: The version indicates that that the AWS S3 provider version 1 is being used. This will help with versioning and tracking changes to the pipeline.</b></li>
+                          <li><b>provider:</b> Specify that we will deploy our code to an S3 bucket.</li>
+                        </ul>
+                      </li>
+                      <li><b>configuration:</b> Here we need to specify the configuration for our provider to deploy our code, since we are using S3 as provider, we need to specify the name of our bucket.
+                        <ul>
+                          <li><b>name:</b> The name of our bucket, in this case, my bucket is <code>jaxelc.cetystijuana.com</code></li>
+                          <li><b>extract:</b> This is optional. This specifies that files will be extracted when making the deployment on the S3 bucket. For example, if you a ZIP file containing files and directories and you want to deploy to S3. If <code>true</code>, CodePipeline will extract the content of the ZIP into the S3 bucket. 
+                            So that files and directories will be directly accessible in the bucket. If <code>false</code>, the ZIP file will be stored as-is in the bucket, and you will need to extract the file yourself to access its files. 
+                          </li>
+                        </ul>
+                      </li>
+                      <li><b>runOrder:</b> Here we set the runOrder as well to 1, to ensure that the stage will run the action first.</li>
+                    </ul>
+                  </li>
+                  Notice that both stages have their <code>runOrder</code> set to 1, remember that we can have multiple actions running on each stage, since there is only 1 action on each stage, setting the runOrder to 1 ensures that each stage will run its action first. If would have multiple actions, this attribute helps 
+                  to specify tje order in which these actions should be executed.
+                </ul><br>
+                After creating the JSON file and checked that everything is correct, just use the aws-cli command to create the pipeling using the JSON file as the config file. <br>
+                <code>aws codepipeline create-pipeline --cli-input-json file://pipeline_config.json</code><br>
+                As this momment, I don't have the necessary permissions to run the command, but this should promt an output containing the JSON file with the configuration for your pipeline: <br>
+                Finally, to initialize your pipeline, just use the aws-cli command to start the pipeline. It will process the latest commit to the source location specified as part of the pipeline: <br>
+                If you don't remember the name of you pipeline, just use <code>aws codepipeline list-pipelines</code> to see the pipelines that you have created. <br>
+                <code>aws codepipeline start-pipeline-execution --name jaxelc-codepipeline</code><br>
+                In this case, if I would created my pipeline, the name would be <code>jaxelc-codepipeline</code> as specified in the JSON file.
+              </div>
+            </div>
+  
+            <!-- Accordion item 7 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q7"
+              aria-expanded="false"
+            >
+              7. Real-world Engineering Challenges #8: Breaking up a Monolith
+            </button>
+            <div id="assignment-q7" class="collapse mb-3">
+              <div align="justify">
+                <p>
+                  The article discusses the challenges and benefits of breaking up monolithic applications into smaller, more manageable components. It revies the case of <em>Khan Academy</em>, a non-profit education provider in the United States that offers free courses on a variety of topics including math, art, computing, and more. <br>
+                  The author, Gergely Orosz, discusses about the case of the massive migration project that Khan Academy had, which happens to be a 1 million lines of Python code Monolith project, which later was then splitted across more than 40 services, mostly in Go. This project took around 3.5 years and 
+                  involved around 100 software engineers.
+                </p>
+                <p>
+                  In this article, it is mentionen that they some value points that need to be considered and covered. <br>
+                  <ul>
+                    <li>Context and motivation</li>
+                    <li>Kickoff and phase</li>
+                    <li>The migration phase</li>
+                    <li>Things that worked well</li>
+                    <li>Choices worth reconsidering</li>
+                    <li>Learnings from working on a 3.5 year-long migration</li>
+                  </ul>
+                </p>
+                <p>
+                  It starts by briefly putting in context about the company, how it works, and how working on a huge monolith feels about. There was some thoughs about the project that needed to urgently be working at: The most important, <b>get rid off Python 2.</b>. Also REST APIs were a huge pain to work with in such a big monolith, 
+                  so people started thinking about breaking the monolith into services.
+                </p>
+                <p>
+                  The team started on thinking on which language to move over to; Python 3? Kotlin? Go? They considered all options and settled on Go, largely for its first-class support in the Google App Engine, and the simplicity and consistency of its language and performance. 
+                  The team ended up converging on a federated GraphQL hub. The main difference between a REST-based “API gateway” is that with REST, a request is often directed to a single service. With GraphQL gateways, a query plan is generated that includes data from multiple backend services.
+                </p>
+                <p>
+                  The they noted started nothing that some stuff will not work just right away. he team wanted to avoid a “big bang” migration in which everything is rewritten at once. Instead, they chose a “field by field” approach. This approach had a step-by-step guide on how gradually migrate all the services. Some of them were thinking 
+                "The automated testing approach is interesting, having a robust automated tests suite can be an additional safety net". However, this didn't work as expected and they didn't think the migration will took as long so it was though for the team.
+                </p>
+                <p>
+                  Even though, some things worked well and the engineering team started the work, they liked Go. ome liked the ease of reading and writing, others praised the documentation, while the tooling and compiler speed all scored points with the team. Other thoughs on this were "erformance was excellent. Compared to Python, Go’s runtime performance was much faster."<br> 
+                  The only problem was the lack of generics. It was the biggest complain that the engineers had. Generics refers to the ability to write a function that could work with a variety of data types and have the compiler automatically create versions for more specific types at compile time. 
+                  This is a language feature that’s widespread in many modern languages like TypeScript, Java, C#, Python and Swift, which all support generics at some level.
+                </p>
+                <p>
+                  With all these features giving a hard time, the team started to think which choices they might reconsider. One of them was "Switching to a brand-new language for the rewrite". "“Was switching to Go worth it in the end?". In the end there always ups and downs with everything, and when you change something, you ALWAYS will have to re-check 
+                  because something might have broken because of that.
+                </p>
+                <p>
+                  As a personal opinion, I think that keeping a low profile while trying to make big changes if very important, because something not always fits at its very first time when working on huges projects. There are a lot of things that need to be consider, specially when working in monoliths, because as much as a monolith can be easy to work with 
+                  at the begining, it's very difficult to scale and maintain, and when it scales to that magnitude, it could be very hard to even be part of it. Problems arise, bugs, etc., and the team have to deal with frustation and try to solve this issues by trying to use other tools. These tools can actually make a difference and have a good impact, but 
+                  it is not always the case.
+                </p>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" data-bs-dismiss="modal">
+            <i class="fas fa-xmark fa-fw"></i>
+            Close Window
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

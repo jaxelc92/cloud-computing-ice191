@@ -530,7 +530,7 @@
                 As It is a <em>continou delivery</em> service, CodePipeline automates the buidling, testing and deployment of the software into production. Additionally, the concetps of <em>continious delivery</em> and <em>continious integration</em> are key concepts when working with pipelines.<br>
               </p>
               <p>
-                <b>Continious delivery (CI)</b><br>
+                <b>Continious delivery (CD)</b><br>
                 It is software development practice where code changes are automatically prepared for a release to production. A pillar of modern application development, continuous delivery expands upon continuous integration by deploying all code changes to a testing environment and/or a production environment after the build stage.
               </p>
               <p>
@@ -616,8 +616,16 @@
                     <li><b>runOrder:</b> Here we set the runOrder as well to 1, to ensure that the stage will run the action first.</li>
                   </ul>
                 </li>
-                
-              </ul>
+                Notice that both stages have their <code>runOrder</code> set to 1, remember that we can have multiple actions running on each stage, since there is only 1 action on each stage, setting the runOrder to 1 ensures that each stage will run its action first. If would have multiple actions, this attribute helps 
+                to specify tje order in which these actions should be executed.
+              </ul><br>
+              After creating the JSON file and checked that everything is correct, just use the aws-cli command to create the pipeling using the JSON file as the config file. <br>
+              <code>aws codepipeline create-pipeline --cli-input-json file://pipeline_config.json</code><br>
+              As this momment, I don't have the necessary permissions to run the command, but this should promt an output containing the JSON file with the configuration for your pipeline: <br>
+              Finally, to initialize your pipeline, just use the aws-cli command to start the pipeline. It will process the latest commit to the source location specified as part of the pipeline: <br>
+              If you don't remember the name of you pipeline, just use <code>aws codepipeline list-pipelines</code> to see the pipelines that you have created. <br>
+              <code>aws codepipeline start-pipeline-execution --name jaxelc-codepipeline</code><br>
+              In this case, if I would created my pipeline, the name would be <code>jaxelc-codepipeline</code> as specified in the JSON file.
             </div>
           </div>
 
@@ -632,7 +640,48 @@
           </button>
           <div id="assignment-q7" class="collapse mb-3">
             <div align="justify">
-              <p>Hola</p>
+              <p>
+                The article discusses the challenges and benefits of breaking up monolithic applications into smaller, more manageable components. It revies the case of <em>Khan Academy</em>, a non-profit education provider in the United States that offers free courses on a variety of topics including math, art, computing, and more. <br>
+                The author, Gergely Orosz, discusses about the case of the massive migration project that Khan Academy had, which happens to be a 1 million lines of Python code Monolith project, which later was then splitted across more than 40 services, mostly in Go. This project took around 3.5 years and 
+                involved around 100 software engineers.
+              </p>
+              <p>
+                In this article, it is mentionen that they some value points that need to be considered and covered. <br>
+                <ul>
+                  <li>Context and motivation</li>
+                  <li>Kickoff and phase</li>
+                  <li>The migration phase</li>
+                  <li>Things that worked well</li>
+                  <li>Choices worth reconsidering</li>
+                  <li>Learnings from working on a 3.5 year-long migration</li>
+                </ul>
+              </p>
+              <p>
+                It starts by briefly putting in context about the company, how it works, and how working on a huge monolith feels about. There was some thoughs about the project that needed to urgently be working at: The most important, <b>get rid off Python 2.</b>. Also REST APIs were a huge pain to work with in such a big monolith, 
+                so people started thinking about breaking the monolith into services.
+              </p>
+              <p>
+                The team started on thinking on which language to move over to; Python 3? Kotlin? Go? They considered all options and settled on Go, largely for its first-class support in the Google App Engine, and the simplicity and consistency of its language and performance. 
+                The team ended up converging on a federated GraphQL hub. The main difference between a REST-based “API gateway” is that with REST, a request is often directed to a single service. With GraphQL gateways, a query plan is generated that includes data from multiple backend services.
+              </p>
+              <p>
+                The they noted started nothing that some stuff will not work just right away. he team wanted to avoid a “big bang” migration in which everything is rewritten at once. Instead, they chose a “field by field” approach. This approach had a step-by-step guide on how gradually migrate all the services. Some of them were thinking 
+              "The automated testing approach is interesting, having a robust automated tests suite can be an additional safety net". However, this didn't work as expected and they didn't think the migration will took as long so it was though for the team.
+              </p>
+              <p>
+                Even though, some things worked well and the engineering team started the work, they liked Go. ome liked the ease of reading and writing, others praised the documentation, while the tooling and compiler speed all scored points with the team. Other thoughs on this were "erformance was excellent. Compared to Python, Go’s runtime performance was much faster."<br> 
+                The only problem was the lack of generics. It was the biggest complain that the engineers had. Generics refers to the ability to write a function that could work with a variety of data types and have the compiler automatically create versions for more specific types at compile time. 
+                This is a language feature that’s widespread in many modern languages like TypeScript, Java, C#, Python and Swift, which all support generics at some level.
+              </p>
+              <p>
+                With all these features giving a hard time, the team started to think which choices they might reconsider. One of them was "Switching to a brand-new language for the rewrite". "“Was switching to Go worth it in the end?". In the end there always ups and downs with everything, and when you change something, you ALWAYS will have to re-check 
+                because something might have broken because of that.
+              </p>
+              <p>
+                As a personal opinion, I think that keeping a low profile while trying to make big changes if very important, because something not always fits at its very first time when working on huges projects. There are a lot of things that need to be consider, specially when working in monoliths, because as much as a monolith can be easy to work with 
+                at the begining, it's very difficult to scale and maintain, and when it scales to that magnitude, it could be very hard to even be part of it. Problems arise, bugs, etc., and the team have to deal with frustation and try to solve this issues by trying to use other tools. These tools can actually make a difference and have a good impact, but 
+                it is not always the case.
+              </p>
             </div>
           </div>
         </div>
