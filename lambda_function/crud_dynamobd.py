@@ -5,12 +5,13 @@ import json
 dynamodb = boto3.client('dynamodb')
 
 # # Define the table name
-table = dynamodb.Table('Students')
+table = 'Students'
 
 # # Function to create (C) an item
 def create_resource(payload):
     try:
-        response = table.put_item(
+        response = dynamodb.put_item(
+            TableName=table,
             Item=payload
         )
         print(f"Student with id:{payload.get('id')} successfully created.")
@@ -21,13 +22,13 @@ def create_resource(payload):
 # # Function to find or read (R) an item
 def get_resource(payload):
     try:
-        response = table.get_item(
+        response = dynamodb.get_item(
+            TableName=table,
             Key={
             'id': {'S': payload.get('id')}
             })
-        item=response.get('Item')
-        if item:
-            return {'statusCode': 200, 'body': json.dumps(item)}
+        if 'Item' in response.keys():
+            return {'statusCode': 200, 'body': json.dumps(response)}
         else:
             return {'statusCode': 404, 'body': 'Item not found'}
     except Exception as e:
@@ -36,15 +37,18 @@ def get_resource(payload):
 # # Function to update (U) an item
 def update_resource(payload):
     try:
-        response = table.update_item(
-            Key={'id': {'S': payload.get('id')}},
-            UpdateExpression=payload.get('UpdateExpression'),
-            ExpressionAttributeValues=payload.get('expression_attribute_values'),
-            ConditionExpression=payload.get('conditionExpression'),
+        id = payload.get('id')
+        update_expression = payload.get('updateExpression')
+        expression_attribute_values = payload.get('expression_attribute_values')
+        response = dynamodb.update_item(
+            TableName=table,
+            Key={'id': {'S': id}},
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=expression_attribute_values,
+            ConditionExpression='attribute_exists(id)',
             ReturnValues='ALL_NEW'
         )
-        item = response.get('Item')
-        if item:
+        if 'Item' in response.keys():
             return {"statusCode": 200, "body": json.dumps(response)}
         else:
             return {"statusCode": 404, "body": "Item does not exist"}
@@ -54,11 +58,11 @@ def update_resource(payload):
 # # Function to delete (D) an item
 def delete_resource(payload):
     try:
-        response = table.delete_item(
-        Key={'id': {'S': payload.get('id')}}
-        )
-        item = response.get('Item')
-        if item:
+        response = dynamodb.delete_item(
+            TableName=table,
+            Key={'id': {'S': payload.get('id')}}
+            )
+        if 'Item' in response.keys():
             print('Item deleted successfully:')
             return {"statusCode": 200, "body": json.dumps(response)}
         else:
