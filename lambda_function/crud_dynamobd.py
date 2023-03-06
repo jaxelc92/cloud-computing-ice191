@@ -37,18 +37,20 @@ def get_resource(payload):
 # # Function to update (U) an item
 def update_resource(payload):
     try:
-        id = payload.get('id')
-        update_expression = payload.get('updateExpression')
-        expression_attribute_values = payload.get('expression_attribute_values')
-        response = dynamodb.update_item(
-            TableName=table,
-            Key={'id': {'S': id}},
-            UpdateExpression=update_expression,
-            ExpressionAttributeValues=expression_attribute_values,
-            ConditionExpression='attribute_exists(id)',
-            ReturnValues='ALL_NEW'
-        )
-        if 'Item' in response.keys():
+        get_response = get_resource(payload)
+        item = get_response.get('Item')
+        if item:
+            id = payload.get('id')
+            update_expression = payload.get('updateExpression')
+            expression_attribute_values = payload.get('expression_attribute_values')
+            response = dynamodb.update_item(
+                TableName=table,
+                Key={'id': {'S': id}},
+                UpdateExpression=update_expression,
+                ExpressionAttributeValues=expression_attribute_values,
+                ConditionExpression='attribute_exists(id)',
+                ReturnValues='ALL_NEW'
+            )
             return {"statusCode": 200, "body": json.dumps(response)}
         else:
             return {"statusCode": 404, "body": "Item does not exist"}
@@ -58,11 +60,13 @@ def update_resource(payload):
 # # Function to delete (D) an item
 def delete_resource(payload):
     try:
-        response = dynamodb.delete_item(
-            TableName=table,
-            Key={'id': {'S': payload.get('id')}}
-            )
-        if 'Item' in response.keys():
+        get_response = get_resource(payload)
+        item = get_response.get('Item')
+        if item:
+            response = dynamodb.delete_item(
+                TableName=table,
+                Key={'id': {'S': payload.get('id')}}
+                )
             print('Item deleted successfully:')
             return {"statusCode": 200, "body": json.dumps(response)}
         else:
