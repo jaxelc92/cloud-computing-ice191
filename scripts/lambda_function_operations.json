@@ -1,0 +1,14 @@
+{
+    "operation": "PATCH",
+    "payload": {
+        "id": "123456",
+        "full_name": "Example student",
+        "personal_website": "examplestude.cetystijuana.com",
+        "UpdateExpression": "SET full_name = :name, personal_website = :website",
+        "expression_attribute_values": {
+            ":name": {"S": "full_name"},
+            ":website": {"S": "personal_website"}
+        },
+        "conditionExpression": "attribute_exists(id)"
+        }
+}

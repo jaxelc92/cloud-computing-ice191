@@ -34,7 +34,74 @@
             </button>
             <div id="assignment-q1" class="collapse mb-3">
               <div align="justify">
-                
+                <p>
+                  Before starting to create a Lambda Function, let's remember what it is.
+                </p>
+                <p>
+                  AWS Lambda is a compute service that lets you run code without provisioning or managing servers. Lambda runs your code on a compute infrastructure and performs all of the administration of the compute resources, including server and operating system maintenance, capacity provisioning and automatic scaling, and logging. 
+                With Lambda, you can run code for virtually any type of application or backend service. To see a list of the languages that Lambda supports, visit <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html">Lambda runtimes</a>. <br>
+                In other words, we can say that a Lambda function is a serverless service, or FaaS (Function as a Service), that allows us to run code within other AWS Services. One of the main advantages of Lambda, is that it allows the developer on focusing more on the code, letting the service to run the managing tasks.
+                </p>
+                <p>
+                  There are advantages when using AWS Lambda, one of the main advantages is the <b>scalability</b> of applications and projects. Let's have a look at some advantages:
+                </p>
+                <p>
+                  <b>Advantages:</b>
+                  <ul>
+                    <li><b>Scalability: </b>It's a highly scalable service. Helps to handle large volume of requests</li>
+                    <li><b>Cost-effective:c</b>Depending of the number of requests and time of execution of the code, so only pay for what it is used</li>
+                    <li><b>Low maintenance:c</b>The developer doesn't have to worry about management, operating systems or patching. AWS does all maintenance.</li>
+                    <li><b>Integration with other AWS services: </b>It easily integrates with other services such as Amazon S3, Amazon DynamoDB, and Amazon API Gateway</li>
+                  </ul>
+                </p>
+                <p>
+                  There are also some disadvantages that we can come across when using Lambda functions.
+                </p>
+                <p>
+                  <b>Disadvantages:</b>
+                  <ul>
+                    <li><b>Cold start delays:</b> It takes longer to start up at the first time the function is executed, causing delays</li>
+                    <li><b>Limited execution time:</b> It has a maximum execution time of 15 minutes, so this may not be enough for certain cases</li>
+                    <li><b>Limited resources:</b> It hast a limited amout of CPU, memory and network resources available. So it not my be enough for some applications</li>
+                    <li><b>Debugging can be challenging:</b> In contrast with traditional debugging, AWS Lambda requires to work remotely, as the code runs in the cloud, and you will rely on debugging and monitoring tools to do it. This may not reproduce the same conditions that caused the problem, also, it can be difficult to trace the flow of events 
+                    thorugh the system and determine where the problem is ocurring</li>
+                  </ul>
+                </p>
+                <p>
+                  To create a Lambda Function, we simply use the AWS CLI with the corresponding command, and specify the settings for the Lambda Function. But this is tricky becuase there are some things that need to be considered. <br>
+                  In this case, we are going to create a Lambda function to run Python code. To do this, we need to create something called <code>a deployment package</code>, this is neccesary to deploy code to Lambda. A deployment package will act as the source bundle to run our function's code and its dependencies. <br>
+                  Lambda supports two types of deployment packages: container images and zip files. We are using <b>zip files</b> for our Lambda. <br>
+                  In this zip file, we need to <b>include the application code and its dependencies (if any).</b>
+                </p>
+                <p>
+                  Let's go back to our python scripts that did stuff into DynamoDB. These scripts were used to <code>create</code>, <code>update</code>, <code>find</code> or <code>delete</code> an item on a table. Now we want to create a AWS Lambda function that CRUD over this. <br>
+                  <b>NOTE:</b> CRUD stands to <b>CREATE</b>, <code>READ</code>, <code>UPDATE</code> and <code>DELETE</code>, in relationship with HTTP requests, they refer to the HTTP methods: POST, GET, PATCH and DELETE. In this example we are using PATCH over PUT. <br>
+                  So we are perfoming the same operations, but these time, the Lambda function will perform these operations.
+                </p>
+                <p>
+                  <ol>
+                    <li>
+                      First, we need to integrate our 4 scripts into a single script, or file. So we can just call the file and choose what to do. I have integrated my scrtips into one file and define every actions as a <code>function</code>. Additionally, I modified a little bit every function, this is it looks like:
+                      <img src="assets/img/assignment_imgs/assignment5/q1_crudScript.png" width="100%" alt="">
+                      The payload in every function is the information what will be passed in to the function to do the corresponding action. This information can have several ways, in this case, the payload will be passed in as a API request.
+                    </li>
+                    <li>
+                      After having our script integrated, we need to create another file. This file will be a function that will handle our Lambda every time we run it. It is called <b>the handler</b>. <br>
+                      The handler is the name of the method within our code that Lambda calls to run our function and process events. When a Lambda function is invoked, it runs the handler method. When the handler method is invoked, the Lambda passes two arguments: <code>event</code> and <code> context.</code> <br>
+                      <b>Event</b> is an object that contains information from the invoking service. In other words, the event is from where, or what, the Lambda will get the information from to perform some action. <br>
+                      <b>Context</b> is an object that provides methods and properties that provide information about the invocation, function and runtime environment. In other words, we can see the context object as the meta data of our runtime environment.
+                      <br>
+                      Since we are using a ZIP file as our deployment package, this <b>handler is required.</b> <br>
+                      Let's create our Lambda handler function in another file. We are going to call this file <code>lamda_function.py</code>
+                      <img src="assets/img/assignment_imgs/assignment5/lambda_handler.png" width="100%" alt="">
+                      In this case, we are going to get the information to perfom a CRUD action from an event, and this event could be either a JSON file that is passed in, or an API call. Note that I'm importing my Python script called <code>crud_dynamobd</code> wich do the CRUD actions. So I need to place these 2 files (lambda_function.py and crud_dynamodb.py) inside the same folder so these files 
+                      will be my deployment package.
+                    </li>
+                    <li>
+                      
+                    </li>
+                  </ol>
+                </p>
               </div>
             </div>
   
