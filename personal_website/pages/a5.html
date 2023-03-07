@@ -164,7 +164,15 @@
                 </p>
                 <p>
                   Now what we need to do is to add the <code>HTTP Methods</code> that we want to use in the API. In this case we are going to use <code>POST</code> for creating, <code>GET</code> for reading, <code>PATCH</code> for updating and <code>DELETE</code> for deleting. <br>
-                  Before adding, we need to go back to our <code>lambda_handler</code> method in our Lambdafunction file and change the keyword to represent the HTTP methods.
+                  Before adding the HTTP methods, we need to go back to our <code>lambda_handler</code> method in our Lambdafunction file and change the keyword to represent the HTTP methods.
+                  <img src="assets/img/assignment_imgs/assignment5/lambda_http_methods.png" width="100%" alt="">
+                  This will help us to tell the relate the HTTP methods added to the API to be invoked with the Lambda function.
+                </p>
+                <p>
+                  Now we have to put the HTTP methods that we are going to use with our API. Remeber that we are going to use <code>POST</code>, <code>GET</code>, <code>PATCH</code> and <code>DELETE</code>. <br>
+                  To add a method we use the following command: <br>
+                  <code>aws apigateway put-method  --rest-api-id API_ID --resource-id RESOURCE_ID --http-method GET --authorization-type "NONE" --region us-east-1</code> <br>
+                  In this case just need to replace <b>API_ID</b> with your API id, and the <b>RESOURCE_ID</b> with the resource id you want to add this method.
                 </p>
               </div>
             </div>
