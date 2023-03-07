@@ -166,13 +166,117 @@
                   Now what we need to do is to add the <code>HTTP Methods</code> that we want to use in the API. In this case we are going to use <code>POST</code> for creating, <code>GET</code> for reading, <code>PATCH</code> for updating and <code>DELETE</code> for deleting. <br>
                   Before adding the HTTP methods, we need to go back to our <code>lambda_handler</code> method in our Lambdafunction file and change the keyword to represent the HTTP methods.
                   <img src="assets/img/assignment_imgs/assignment5/lambda_http_methods.png" width="100%" alt="">
-                  This will help us to tell the relate the HTTP methods added to the API to be invoked with the Lambda function.
+                  This will help us to tell the relate the HTTP methods added to the API to be invoked with the Lambda function. <br>
+                  After modifying the code, we need to update the deployment package of the Lambda function, because we updated the code. Just create a new ZIP file of the new modified code, the same files with the new changes will be included in the ZIP file. <br>
+                  When haveing the ZIP file, just use the command to update the configuration code of the Lambda: <br>
+                  <code>aws lambda update-function-code --function-name jaxelc-lambda --zip-file fileb://lambda_function.zip</code>
+                  Just wait a couple of seconds for the changes to take place.
                 </p>
                 <p>
                   Now we have to put the HTTP methods that we are going to use with our API. Remeber that we are going to use <code>POST</code>, <code>GET</code>, <code>PATCH</code> and <code>DELETE</code>. <br>
                   To add a method we use the following command: <br>
                   <code>aws apigateway put-method  --rest-api-id API_ID --resource-id RESOURCE_ID --http-method GET --authorization-type "NONE" --region us-east-1</code> <br>
                   In this case just need to replace <b>API_ID</b> with your API id, and the <b>RESOURCE_ID</b> with the resource id you want to add this method.
+                </p>
+                <p>
+                  We run the command above for every method we want to use and on which resource we want the API to do it. <br>
+                  For example, I want to add the <code>POST</code> HTTP method for my API resource that I created that shows the item after creating it. The command looks like this: <br>
+                  <code>aws apigateway put-method --rest-api-id i3jytdsbre --resource-id 472k48 --http-method POST --authorization-type "NONE" --region us-east-1</code> <br>
+                  Just use this command for every resource that will use an HTTP method, changing the id of the resource and the corresponding HTTP method for each resource.
+                </p>
+                <p>
+                  Putting all methods for the resources: <br>
+                  <ul>
+                    <li>
+                      The method for the resource on showing all items - resource path: /students<br>
+                      <code>aws apigateway put-method --rest-api-id i3jytdsbre --resource-id dyvvma --http-method GET --authorization-type "NONE" --region us-east-1</code>
+                    </li>
+                    <li>
+                      The method for the resource on creating an item - resource path: /students/created<br>
+                      <code>aws apigateway put-method --rest-api-id i3jytdsbre --resource-id 472k48 --http-method POST --authorization-type "NONE" --region us-east-1</code>
+                    </li>
+                    <li>
+                      The method for the resource on finding an item - resource path: /students/{id} <br>
+                      <code>aws apigateway put-method --rest-api-id i3jytdsbre --resource-id 6hkxn7 --http-method GET --authorization-type "NONE" --request-parameters method.request.path.id=true --region us-east-1</code>
+                    </li>
+                    <li>
+                      The method for the resource on updating an item - resource path: /students/updated/{id} <br>
+                      <code>aws apigateway put-method --rest-api-id i3jytdsbre --resource-id pcan0l --http-method PATCH --authorization-type "NONE" --request-parameters method.request.path.id=true --region us-east-1</code>
+                    </li>
+                    <li>
+                      The method for the resource on deleting an item - resource path: /students/deleted <br>
+                      <code>aws apigateway put-method --rest-api-id i3jytdsbre --resource-id t34vfi --http-method DELETE --authorization-type "NONE" --region us-east-1</code>
+                    </li>
+                  </ul>
+                  Note that, in the resources where we have the id resource, we need to specify the path parameters <code>method.request.path.id=true</code> for the resource, because this id is dynamic, so it changes depending on the item. The <code>id</code> word after the path is the name of the resource, in this case <b>{id}</b> <br>
+                  Also we set the <code>--authorization-type</code> to <b>"NONE"</b> because we don't need an authorization key or token at this moment to access the methods.
+                </p>
+                <p>
+                  Now that we have put every necessary method to our API resources, the following step is to integrate them. Since we are going to use our Lambda function, and our API will do the operations over the Lambda function, we are going to integrate the methods using a <b>PROXY</b> for the Lambda. <br>
+                  There are many ways to integrate the methods, in this case a <b>API Gateway Lambda proxy integration</b> is a simple and powerful way to do it, because it allows us to call our Lambda function in the backend, also when we submit an API request, the API passes to the Lambda function the <b>raw request</b> including: <code>headers, query string parameters, URL path variables, payload</code> and <code>API configuration data</code>. <br>
+                  Knowing this, we are going to set up a Lambda proxy integration for our API methods. So we put the integration using the proxy like this: <br>
+                  <code>aws apigateway put-integration --region us-east-1 --rest-api-id i3jytdsbre --resource-id 6hkxn7 --http-method GET --type AWS_PROXY --integration-http-method POST --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:292274580527:function:jaxelc-lambda/invocations</code> <br>
+                  This will integrate out method <code>GET</code> for our resource with id <code>6hkxn7</code> that our API uses to return an item after finding it. <br>
+                  There are several things with this method:
+                  <ul>
+                    <li><b>--rest-api-id:</b> The id of API Gateway API</li>
+                    <li><b>--resource-id:</b> The id of the resource with are integrating with the method</li>
+                    <li><b>--http-method:</b> The method we are integrating with the resource</li>
+                    <li><b>--type:</b> The type of integration, as mentioned, we are using a Lambda Proxy integration. There are other several types of integrations: HTTP, MOCK, HTTP_PROXY. In this case we are using <code>AWS_PROXY</code></li>
+                    <li><b>--integration-http-method:</b> This is the method of the integration for the Lambda. Lambdas use POST method as integration methods.</li>
+                    <li><b>--uri:</b> This specifies the Uniform Resource Identifier, which is the integration endpoint. In this case, we are telling to integrate the uri of the Lambda function to the API.</li>
+                  </ul> 
+                </p>
+                <p>
+                  Now we just need to integrate the rest of our methods. The command above integrates the <code>GET</code> method, so we need to integrate the <code>POST</code>, <code>PATCH</code> and the <code>DELETE</code> methods. <br>
+                  <ul>
+                    <li>
+                      Integrating the <b>POST</b> method: <br>
+                      <code>aws apigateway put-integration --region us-east-1 --rest-api-id i3jytdsbre --resource-id 472k48 --http-method POST --type AWS_PROXY --integration-http-method POST --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:292274580527:function:jaxelc-lambda/invocations</code>
+                    </li>
+                    <li>
+                      Integrating the <b>PATCH</b> method: <br>
+                      <code>aws apigateway put-integration --region us-east-1 --rest-api-id i3jytdsbre --resource-id pcan0l --http-method PATCH --type AWS_PROXY --integration-http-method POST --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:292274580527:function:jaxelc-lambda/invocations</code>
+                    </li>
+                    <li>
+                      Integrating the <b>DELETE</b> method: <br>
+                      <code>aws apigateway put-integration --region us-east-1 --rest-api-id i3jytdsbre --resource-id t34vfi --http-method DELETE --type AWS_PROXY --integration-http-method POST --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:292274580527:function:jaxelc-lambda/invocations</code>
+                    </li>
+                  </ul>
+                  If the command runs successfully, the output should look like this: <br>
+                  <img src="assets/img/assignment_imgs/assignment5/api_put_integration_GET.png" width="100%" alt="">
+                </p>
+                <p>
+                  Now we have to give permissions to our Lambda to let access of our API. This is done with the <code>add-permission</code> command from Lambda. So we are going to tell our Lambda function to allow access of our API: <br>
+                  <code>aws lambda add-permission --function-name jaxelc-lambda --action lambda:InvokeFunction --statement-id apigateway-jaxelc-lambda --principal apigateway.amazonaws.com</code> <br>
+                  Here we have:
+                  <ul>
+                    <li><b>--function-name:</b> The name of the Lambda that we are giving permission</li>
+                    <li><b>--action:</b> The method, or action, of what the Lambda will do, in this case, the API will invoke the Lambda function</li>
+                    <li><b>--statement-id:</b> The id of this permision. This is an unique identifier. It can be any string</li>
+                    <li><b>--principal:</b> The service to which the Lambda will give permission. In this case API Gateway</li>
+                  </ul>
+                  This command outputs with the Lambda permission details
+                  <img src="assets/img/assignment_imgs/assignment5/lambda_permission_api.png" width="100%" alt="">
+                </p>
+                <p>
+                  Finally, we need to deploy our API Gateway APi. We use the following command to create a deployment for our API: <br>
+                  <code>aws apigateway create-deployment --rest-api-id i3jytdsbre --stage-name prod --description 'Production stage deployment'</code>
+                  This will deploy our API. This is the output of the deployment creation:
+                  <img src="assets/img/assignment_imgs/assignment5/api_deployment_created.png" width="100%" alt="">
+                </p>
+                <p>
+                  Now just need to go to the API URL and test it. In this case I'm going to use <b>Postman</b> to test the API. <br>
+                  The URL for testing the API looks like this: <br>
+                  <code>https://{api_id}.execute-api.{region}.amazonaws.com/{stage_name}/{resource_name}</code> <br>
+                  <ul>
+                    <li><b>api_id</b> The id of the API, in this case my API id is <code>i3jytdsbre</code></li>
+                    <li><b>region</b> The region, in this is <code>us-east-1</code></li>
+                    <li><b>stage_name</b> The name of the stage when created the deployment. In this case my stage is called <code>prod</code></li>
+                    <li><b>resource_name</b> The name of the resource you want to test. In this case I'm going to test the resource that finds an item base on the id. So it would be <code>students/31973</code> so the form of the resource is 'students/{id}'</li>
+                  </ul>
+                  So the URL to test this would be: <br>
+                  <code>https://i3jytdsbre.execute-api.us-east-1.amazonaws.com/prod/students/31973</code>
                 </p>
               </div>
             </div>

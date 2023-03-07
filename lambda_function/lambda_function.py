@@ -2,19 +2,18 @@ import crud_dynamobd
 import json
 
 def lambda_handler(event, context):
-    operation = event.get('operation')
-    payload = event.get('payload')
+    operation = event['httpMethod']
 
     if operation == 'POST':
-        response = crud_dynamobd.create_resource(payload)
+        response = crud_dynamobd.create_resource(event)
     elif operation == 'GET':
-        response = crud_dynamobd.get_resource(payload)
+        response = crud_dynamobd.get_resource(event)
     elif operation == 'PATCH':
-        response = crud_dynamobd.update_resource(payload)
+        response = crud_dynamobd.update_resource(event)
     elif operation == 'DELETE':
-        response = crud_dynamobd.delete_resource(payload)
+        response = crud_dynamobd.delete_resource(event)
     else:
-        response = {"statsCode": 400, "error": "Invalid operation"}
+        response = {"statsCode": 400, "error": "Invalid Http method"}
 
     return {
         'statusCode': 200,
