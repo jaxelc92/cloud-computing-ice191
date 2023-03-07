@@ -10,12 +10,13 @@ table = 'Students'
 # # Function to create (C) an item
 def create_resource(event):
     try:
+        item = json.loads(event['body'])
         response = dynamodb.put_item(
             TableName=table,
-            Item=event.get('body')
+            Item=item
         )
-        print(f"Student with id:{event.get('body').get('id')} successfully created.")
-        return {'statusCode': 200, 'body': json.dumps(response)}
+        print(f"Student with id:{item['id']} successfully created.")
+        return {'statusCode': 200, 'body': response}
     except Exception as e:
         return {'statusCode': 500, 'body': str(e)}
 
@@ -28,7 +29,7 @@ def get_resource(event):
             'id': {'S': event.get('pathParameters').get('id')}
             })
         if 'Item' in response.keys():
-            return {'statusCode': 200, 'body': json.dumps(response)}
+            return {'statusCode': 200, 'body': response}
         else:
             return {'statusCode': 404, 'body': 'Item not found'}
     except Exception as e:
@@ -39,8 +40,7 @@ def update_resource(event):
     try:
         payload = json.loads(event['body'])
         get_response = get_resource(event)
-        item = get_response.get('Item')
-        if item:
+        if get_response['statusCode']==200:
             id = event.get('pathParameters').get('id')
             update_expression = 'SET #name = :full_name, #website = :personal_website'
             expression_attribute_names = {'#name': 'full_name', '#website': 'personal_website'}
@@ -64,14 +64,13 @@ def update_resource(event):
 def delete_resource(event):
     try:
         get_response = get_resource(event)
-        item = get_response.get('Item')
-        if item:
+        if get_response['statusCode']==200:
             response = dynamodb.delete_item(
                 TableName=table,
-                Key={'id': {'S': event.get('body').get('id')}}
+                Key={'id': {'S': event.get('pathParameters').get('id')}}
                 )
             print('Item deleted successfully:')
-            return {"statusCode": 200, "body": json.dumps(response)}
+            return {"statusCode": 200, "body": response}
         else:
             return {'statusCode': 404, 'body': 'Item does not exist'}
     except Exception as e:
