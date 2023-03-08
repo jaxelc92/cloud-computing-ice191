@@ -57,9 +57,9 @@ window.addEventListener('DOMContentLoaded', event => {
        $('#portfolioModal4').modal('show').find('.modal-content').load($(this).attr('href'));
       });
     // Function to open modal 5
-      $('.modal5').on('click', function(e){
-        e.preventDefault();
-       $('#portfolioModal5').modal('show').find('.modal-content').load($(this).attr('href'));
-      });
+    $('.modal5').on('click', function(e){
+    e.preventDefault();
+    $('#portfolioModal5').modal('show').find('.modal-content').load($(this).attr('href'));
+    });
 });
 
