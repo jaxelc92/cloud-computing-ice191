@@ -9,7 +9,7 @@
   <div class="modal-body text-center pb-5">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-11">
           <!-- Portfolio Modal - Title-->
           <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">
             Assignment 5
@@ -199,11 +199,11 @@
                 </p>
                 <p>
                   Now what we need to do is to add the <code>HTTP Methods</code> that we want to use in the API. In this case we are going to use <code>POST</code> for creating, <code>GET</code> for reading, <code>PATCH</code> for updating and <code>DELETE</code> for deleting. <br>
-                  Before adding the HTTP methods, we need to go back to our <code>lambda_handler</code> method in our Lambdafunction file and change the keyword to represent the HTTP methods.
+                  Before adding the HTTP methods, we need to go back to our <code>lambda_handler</code> method in our Lambda function file and change the keyword to represent the HTTP methods.
                   <img src="assets/img/assignment_imgs/assignment5/lambda_http_methods.png" width="100%" alt="">
                   This will help us to tell the relate the HTTP methods added to the API to be invoked with the Lambda function. <br>
                   After modifying the code, we need to update the deployment package of the Lambda function, because we updated the code. Just create a new ZIP file of the new modified code, the same files with the new changes will be included in the ZIP file. <br>
-                  When haveing the ZIP file, just use the command to update the configuration code of the Lambda: <br>
+                  Having the ZIP file, just use the command to update the configuration code of the Lambda: <br>
                   <code>aws lambda update-function-code --function-name jaxelc-lambda --zip-file fileb://lambda_function.zip</code>
                   Just wait a couple of seconds for the changes to take place.
                 </p>
@@ -314,7 +314,27 @@
                   <code>https://i3jytdsbre.execute-api.us-east-1.amazonaws.com/prod/students/31973</code>
                 </p>
                 <p>
-                  Here is the example of testing the <code>GET</code> method using the above URL
+                  Before going into Postman and test out API, we need to go back one more time to our Lambda function file, and change the way we are getting the <b>HTTP method</b>. This step is important because, accordingly to the AWS Lambda Proxy Integrations Documentation, there is an input format of a Lambda function proxy integration. We 
+                  can check the complete input format by visiting <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format">Input format of a Lambda function for proxy integration.</a> <br>
+                  With this, we change our Lambda hanlder to get the corresponding HTTP method when sending a request using the API Gateway API we created. So the new <code>lambda function file</code> will look like this:
+                  <img src="assets/img/assignment_imgs/assignment5/lambda_handler_updated.png" width="100%" alt="">
+                </p>
+                <p>
+                  Also, I have to modify the <b>CRUD functions</b> to be according with the input format for the lambda proxy. This will allow our functions handle the input data correctly according to this input format.
+                  <ul>
+                    <li><b>Update on the create function:</b></li>
+                    <img src="assets/img/assignment_imgs/assignment5/create_function_updated.png" width="100%" alt="">
+                    <li><b>Update on the read function:</b></li>
+                    <img src="assets/img/assignment_imgs/assignment5/get_function_updated.png" width="100%" alt="">
+                    <li><b>Update on the update function:</b></li>
+                    <img src="assets/img/assignment_imgs/assignment5/update_function_updated.png" width="100%" alt="">
+                    <li><b>Update on the delete function:</b></li>
+                    <img src="assets/img/assignment_imgs/assignment5/delete_function_updated.png" width="100%" alt="">
+                  </ul> 
+                  These updated functions will handle better our API requests when sending the data on the request.
+                </p>
+                <p>
+                  Now we can go a test our API =D. Here is the example of testing the <code>GET</code> method using our api testing URL:
                   <img src="assets/img/assignment_imgs/assignment5/postman_api_test_GET.png" width="100%" alt="">
                 </p>
                 <p>
