@@ -61,5 +61,20 @@ window.addEventListener('DOMContentLoaded', event => {
     e.preventDefault();
     $('#portfolioModal5').modal('show').find('.modal-content').load($(this).attr('href'));
     });
+    // Function to open modal 6
+    $('.modal6').on('click', function(e){
+        e.preventDefault();
+        $('#portfolioModal6').modal('show').find('.modal-content').load($(this).attr('href'));
+        });
+    // Function to open modal 7
+    $('.modal7').on('click', function(e){
+        e.preventDefault();
+        $('#portfolioModal7').modal('show').find('.modal-content').load($(this).attr('href'));
+        });
+        // Function to open modal 8
+    $('.modal8').on('click', function(e){
+        e.preventDefault();
+        $('#portfolioModal8').modal('show').find('.modal-content').load($(this).attr('href'));
+        });
 });
 

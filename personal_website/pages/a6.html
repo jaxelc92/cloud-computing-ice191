@@ -1,0 +1,133 @@
+<div class="modal-header border-0">
+    <button
+      class="btn-close"
+      type="button"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body text-center pb-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-11">
+          <!-- Portfolio Modal - Title-->
+          <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">
+            Assignment 6
+          </h2>
+          <!-- Icon Divider-->
+          <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+          </div>
+          <!-- Portfolio Modal - Image-->
+          <!-- Portfolio Modal - Text-->
+          <!-- Accordion -->
+          <div class="accordion-body">
+            <!-- Accordion item 1 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q1"
+              aria-expanded="false"
+            >
+              1. Modify Lambda Function to include the field City for each new Record in the Students DynamoDB table.
+            </button>
+            <div id="assignment-q1" class="collapse mb-3">
+              <div align="justify">
+                
+              </div>
+            </div>
+  
+            <!-- Accordion item 2 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q2"
+              aria-expanded="false"
+            >
+              2. Modify Read in Lambda function to return the weather of the city assigned to the Students DynamoDB table.
+            </button>
+            <div id="assignment-q2" class="collapse mb-3">
+              <div align="justify">
+                
+              </div>
+            </div>
+  
+            <!-- Accordion item 3 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q3"
+              aria-expanded="false"
+            >
+              3. Add authorization to API Gateway API Only valid user is admin and password abc123!@#
+            </button>
+            <div id="assignment-q3" class="collapse mb-3">
+              <div align="justify">
+                
+              </div>
+            </div>
+
+            <!-- Accordion item 4 -->
+            <button
+              class="accordion-button collapsed mb-3"
+              data-bs-toggle="collapse"
+              data-bs-target="#assignment-q4"
+              aria-expanded="false"
+            >
+              4. Test Driven Developement is the best thing that has happened to software design.
+            </button>
+            <div id="assignment-q4" class="collapse mb-3">
+              <div align="justify">
+                <p>
+                  TDD (Test Driven Developement) is based on the the idea of a <em>'fail-pass-refactor'</em>. This means that when writing software using this technique TDD, there is no need to know how the final product will look like, this involves knowing the code structure such as class names, methods, or implementation details.
+                </p>
+                <p>
+                  TDD is know to be an iterative approach that helps software to become an 'elegant' solution. This means that the software works as expected in certain way that is well interpreted by every environment. It is a fancy approach!.
+                </p>
+                <p>
+                  There are things to consider, and this approach supports every one of them. Let's think about creating an application, we can write code and then test it, or backwards, we can write some tests cases and the write the code. This may seem farfecthed, but thanks to TDD, these 2 design solutions are a good to go approach.
+                </p>
+                <p>
+                  <ol>
+                    <li>When writing code first and then you need to test it. You write some tests and find out that your code runs perfectly and passes all the tests. This may sound perfect, but there are still some downs because details about implementation. Then some questions arise that can break this approach down: <em>When to testing? How to know coding is done?</em></li>
+                    <li>On the other hand, when start by defining some tests first, there are some benefits. First the tests can verify behaviours and not implementation details. Secondly, the documentation is always up to date, and the code is written based on this documentation. And the only actual question that rises from this approach is: <em>what to expect from the code?</em></li>
+                  </ol>
+                </p>
+                <p>
+                  In some cases, you can be in the situation where you have code that it may seem impossible to test, and TDD helps to know how to use it on this kind of code. There are some ways: <br>
+                  <ul>
+                    <li>
+                      <b>Spying and Mocking</b><br><em>There is no way to write a proper test!</em> This can happen when writing code first and tests are postponed. If test are postponed that much, it becomes so difficult to write tests for existing code, as code grows, so the complexity of it.
+                    </li>
+                    <li>
+                      <b>Variable Test Data</b><br>
+                      Not all data is indempotent, so we writing tests and test some code, not always will get the same results. Also, there might be data that it is outside the block or scope being tested, so it will be difficult to know if the problem comes from outside the code or from another method.
+                    </li>
+                    <li>
+                      <b>Bloated Setup</b><br>
+                      When having methods that need to be initialized from other methods or services, there might rise some delays in the startud of these methods, and the object might either has too many dependencies or the Single Responsibility principle has been broken.
+                    </li>
+                    <li>
+                      <b>Mocking Hell</b><br>
+                      Nobody wants to stuck in going back to see mocks that return another muck and so on and so on. This hell is due to breaking the <em>The Law of Demeter</em> which implies that information is leaking from one component to another. Now you can think, is the production code ok or the tests? Because of a small change can lead to a butterfly effect into these.
+                    </li>
+                  </ul>
+                </p>
+                <p>
+                  It's imporant to know, or think, that TDD being the 'best thing' that has happened to software design is subjective and dependes on a lot of factors, including the actual project and the development team. Yes, TDD is found to be very useful by some developers and organizations to catch bugs and errors early in development processes, and this can result in better code quality, 
+                  However, there are different development technologies and practices out there that can work better for different teams or projects, and what works best for some organization might not work as well as that for another.
+                </p>
+              </div>
+            </div>
+
+          </div> <!-- ends accordion -->
+
+          <button class="btn btn-primary" data-bs-dismiss="modal">
+            <i class="fas fa-xmark fa-fw"></i>
+            Close Window
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
