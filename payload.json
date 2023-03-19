@@ -1,8 +1,0 @@
-{
-    "operation": "POST",
-    "payload": {
-        "id": {"S":"31973"},
-        "full_name": {"S":"Axel Cruz"},
-        "personal_website": {"S":"jaxelc.cetystijuana.com"}
-        }
-}

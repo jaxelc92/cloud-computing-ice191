@@ -113,7 +113,16 @@
             </button>
             <div id="assignment-q2" class="collapse mb-3">
               <div align="justify">
+                <p>In order to perform this task, we must go and edit our Lambda function code. In this case, because of my implementation, and will perform this task in a different way that we did on class. I will only edit my <code>crud_dynamodb</code> file, and include the features needed to call the <b>Weather API</b> in order to get the weather for the city that the student has specified in its Item in the DynamoDB table. NOTE: I already had my Lambda and API working correctly, so I will skip all these steps we saw in class for creating and setting up the Lambda function and the API Gateway API. </p>
+                <h4>Prerequisites</h4>
+                <p>Before beginning to update the CRUD file, first we need to update our <b>item</b> in the DynamoDB table, to add the field <b>weather</b>, so we can store the weather data in this field.</p>
+                <p>This can be simply done by sending a <code>PATCH</code> request to our item in the table and adding the <b>weather</b> field. <br>
+                <b>NOTE:</b> Because of my implementation, I need to update a little bit the <code>update</code> function in the CRUD file to update a <b>weather</b> field when added. If we don't do this step, we will an error when sending a <code>PATCH</code> request because our function can not update <b>non-existing</b> fields without specifying them inside the method.</p>
                 
+                <h4><b>Updating the CRUD file and adding methods to request the weather using the Weather API</b></h4>
+                <p>First, for simplicity, I will use some of the code we used in class to get the weather with a request to the weather API. In this case, I will bring the <code>secretsmanager</code> secret generator to get an API key, so the API can use this keys when making request to have the information secured from unauthorized calls. Also, I will also bring the method to make a simple <code>GET</code> request to the Weather API, which is the <code>get_weather</code> function.</p>
+                <p>So to summarize, I will bring the <code>get_secret</code> and the <code>get_weather</code> functions and make them work within my code.</p>
+                <p></p>
               </div>
             </div>
   
