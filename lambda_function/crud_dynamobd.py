@@ -32,7 +32,7 @@ def create_resource(event, context):
 
 # # Function to find or read (R) an item
 def get_resource(event, context):
-    id = event.get('pathParameters', {}).get('id', None)
+    id = event.get('pathParameters').get('id')
     if not id:
         return {
             'statusCode': 400,
@@ -65,20 +65,15 @@ def update_resource(event, context):
     try:
         # Load json object from the input format of lambda integration proxy
         # from API request calling the Lambda function
-        payload = json.loads(event['body']) 
-        get_response = get_resource(event) # validate if item exists in table
+        get_response = get_resource(event, context) # validate if item exists in table
         if get_response['statusCode']==200: # If item exists do update
-            id = event.get('pathParameters', {}).get('id', None)
-            # Load corresponding data for the dynamodb update_item() method
-            update_expression = 'SET #name = :full_name, #website = :personal_website'
-            expression_attribute_names = {'#name': 'full_name', '#website': 'personal_website'}
-            expression_attribute_values = {':full_name': payload['full_name'], ':personal_website': payload['personal_website']}
+            id = event.get('pathParameters').get('id')
+            item = json.loads(event['body'])
             response = dynamodb.update_item(
                 TableName=table,
                 Key={'id': {'S': id}}, # Use 'S' type specifier to indicate that 'id' is a string
-                UpdateExpression=update_expression,
-                ExpressionAttributeNames = expression_attribute_names,
-                ExpressionAttributeValues=expression_attribute_values,
+                UpdateExpression = item['UpdateExpression'],
+                ExpressionAttributeValues = {":name": item["payload"]["full_name"], ":website": item["payload"]["personal_website"], ":city": item["payload"]["city"]},
                 ConditionExpression='attribute_exists(id)',
                 ReturnValues='ALL_NEW'
             )
@@ -107,7 +102,7 @@ def delete_resource(event, context):
             'body': 'Need to input an id'
         }
     try:
-        get_response = get_resource(event) # Validate if item exists in table
+        get_response = get_resource(event, context) # Validate if item exists in table
         if get_response['statusCode']==200: # If item exists do delete
             response = dynamodb.delete_item(
                 TableName=table,

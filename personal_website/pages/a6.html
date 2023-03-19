@@ -33,7 +33,72 @@
             </button>
             <div id="assignment-q1" class="collapse mb-3">
               <div align="justify">
-                
+                <p>
+                    For this task, I just need to go to update the CRUD functions in the crud_dynamodb file. This is because of the way that I implemented the Lambda. Since I have the Lambda function handler in a different 
+                    file, there is no need to change nothing on this file.
+                </p>
+                <p>
+                    The functions that need to be updated are: <code>create</code> and <code>update</code> functions. This is how the functions look like now:
+                    <ul>
+                        <li>
+                            <b>Create function</b>
+                            <div>
+                                <img src="assets/img/assignment_imgs/assignment5/create_function_updated.png" width="100%" alt="">
+                            </div>
+                        </li>
+                        <li>
+                            <b>Update funtion</b>
+                            <div>
+                                <img src="assets/img/assignment_imgs/assignment5/update_function_updated.png" width="100%" alt="">
+                            </div>
+                        </li>
+                    </ul>
+                </p>
+                <p>
+                    As we can see, the <code>create</code> function takes a whole item to add it to the Students DynamoDB table, so in this case, there is no need to modify in this function. To include the field <b>city</b> in the item, we just need to 
+                    specify it in the input payload of the Lambda Function when invoking the function, or when sending a <code>POST</code> request to the API. Remember that this payload is JSON formatted data, and it should look like this for creating a new item in the table with the <b>city</b> field inside it:
+                    <div>
+                        <img src="assets/img/assignment_imgs/assignment6/create_input_json.png" alt="">
+                    </div>
+                </p>
+                <p>This will create an item in the Students DynamoDB table when invoking the <code>create</code> function.</p>
+                <h4>Testing the Create function</h4>
+                <p>Let's test the <code>create</code> function by sending a <code>POST</code> request to the API for creating a new item with city field. I will use <b>Postman</b> to test it.</p>
+                <div><img src="assets/img/assignment_imgs/assignment6/postman_createWithCity_test.png" width="100%" alt=""></div>
+                <p>Specify that the input is in the body of the request using the JSON format mentioned earlier. Just a reminder to use the correct URL for <code>POST</code> requests in the API.</p>
+                <div><img src="assets/img/assignment_imgs/assignment6/postman_createWithCity_test_sucess.png" width="100%" alt=""></div>
+                <p>We can see that the request was successful because we got an status code of 200. Let's scan the Students DynamoDB table to confirm that our item was successfully created: <br>
+                    <code>aws dynamodb scan --table-name Students</code>
+                    <div><img src="assets/img/assignment_imgs/assignment6/dynamo_test_create.png" alt=""></div>
+                </p>
+                <p>Scrolling down to look for our item, and there it is. This means that the creation of the item with the field <b>city</b> was successful.</p>
+                <h4>Testing the Update function</h4>
+                <p>
+                    Now, for the <code>update</code> function. Here we do need to modify a little bit the function so it will update, or sucharnge, the <b>city</b> field. If we don't modify the function and we try to update an Item that has the <b>city</b> field in it, we will get an error when invoking the function. 
+                    So we need to modify the function to handle the city field. Just modify the <code>update expresion</code> and the <code>expression attributes</code> of the <code>get_item()</code> dynamodb method. <br>
+                    Let's <code>scan</code> the Students DynamoDB table and look for our item: <code>aws dynamodb scan --table-name Students</code>
+                    <div>
+                        <img src="assets/img/assignment_imgs/assignment6/axel_item_dynamodb.png" alt="">
+                    </div>
+                </p>
+                <p>This is our actual item, with our actual data, and as we can see, we don't have the <b>city</b> field. <br>
+                    So in order to add the field to the item, let's modify the <code>update</code> function in the CRUD file.</p>
+                <img src="assets/img/assignment_imgs/assignment6/update_function_modified.png" width="100%" alt="">
+                <p>As mentioned before, I modified the <code>update expression</code> and the <code>expression attributes</code> to include the <b>city</b> field in the item.</p>
+                <p>Before testing this new modified <code>update</code> function, we need to update the Lambda Function deploy package, so the Lambda function can execute the updated code. Just create a new <b>ZIP</b> file with the updated code and use the command to update it: <br>
+                <code>aws lambda update-function-code</code></p>
+                <p>To test and update the item with the new field <b>city</b>, there 2 ways to do it. The first one, the obvious one, is calling the modified <code>update</code> function to update the item. The second option is to delete the existing item, and create a new item using the <code>create</code> function 
+                and specifying the city as we did in the previous step. Let's use the modified <code>update</code> function. <br>
+                I will send a <code>PATCH</code> request to the API to modify the item using <b>Postman</b> specifying the values to be updated.</p>
+                <img src="assets/img/assignment_imgs/assignment6/postman_updateWithCity_test.png" width="100%" alt="">
+                <p>It's important to mention that because of my code implementation, is why the request body has to be passed in in this format when invoking the <code>update</code> function. <br>
+                Now let's check the response of the request</p>
+                <img src="assets/img/assignment_imgs/assignment6/postman_updateWithCity_test_success.png" width="100%" alt="">
+                <p>As we can see, the response was successful and the Item has been updated with a new field called <b>city</b>. Let's scan the Students table to verify that the Item was actually updated. <br>
+                <code>aws dynamodb scan --table-name Students</code></p>
+                <img src="assets/img/assignment_imgs/assignment6/dynamo_test_update.png" alt="">
+                <p>As we can see, the update was successful, and the Item was updated correctly and now the field <b>city</b> has been added.</p>
+                <!-- Ends accordion item 1 content -->
               </div>
             </div>
   
