@@ -287,15 +287,15 @@
                 <p>This will create the authorizer and prompt with something like this:</p>
                 <img src="assets/img/assignment_imgs/assignment6/q3_create_authorizer.png" alt="">
                 <p>If we want to make changes to the authorizer at sometime, we are going need the <b>authorizer id</b>, so in this case mine is <b>pmthvy</b>.</p>
-                <h4>7. Update the authorizer so the API Gateway use it</h4>
-                <p>Now we need to update the authorizer, and tell the API Gateway API to use this authorizer, so whenever the API sends a request, it will use the authorizer to create an IAM policy that controll the access to the request API endpoint based on the user's permissions.</p>
+                <h4>7. Update the authorizer so the API Gateway uses it</h4>
+                <p>Now we need to update the authorizer, and tell the API Gateway API to use this authorizer, so whenever a request is sent to the API, it will use the authorizer to create an IAM policy that controll the access to the request API endpoint based on the user's permissions.</p>
                 <p>To update the authorizer, use the following command:</p>
                 <p><code>aws apigateway update-authorizer --rest-api-id i3jytdsbre --authorizer-id pmthvy --patch-operations op='replace',path='/type',value='COGNITO_USER_POOLS' op='replace',path='/authorizerUri',value='arn:aws:apigateway:us-east-1:cognito-idp:authorize' op='replace',path='/identitySource',value='method.request.header.Authorization'</code></p>
                 <p>Here we are specifying the api authorizer to get the autentication data from the <b>Authorization</b> header as the identity source so it validates the information and authenticates de user.</p>
                 <p>This is the output:</p>
                 <img src="assets/img/assignment_imgs/assignment6/q3_update_authorizer.png" alt="">
                 <h4>8. Update the HTTP Methods by adding the Authorization header to them</h4>
-                <p>Now we need to update all of our <code>HTTP</code> methods that we use the our API to add the authorizer to them, so when they are invoked, they will use the authorizer to check the authentication status of the user.</p>
+                <p>Now we need to update all of our <code>HTTP</code> methods that we use in the API to add the authorizer to them, so when they are invoked, they will use the authorizer to check the authentication status of the user.</p>
                 <p>Use the following command to update each method:</p>
                 <ul><li><p><b>Updating the <code>GET</code> Http method:</b></p></li></ul>
                 <p><code>aws apigateway update-method --rest-api-id i3jytdsbre --resource-id 6hkxn7 --http-method GET --patch-operations op='replace',path='/authorizationType',value='COGNITO_USER_POOLS' op='replace',path='/authorizerId',value='pmthvy'</code></p>
@@ -322,7 +322,7 @@
                 <p><code>aws cognito-idp update-user-pool-client --user-pool-id us-east-1_HE6pT40ed --client-id 68u57vg37jms555l2ud8ku861b --supported-identity-providers "COGNITO" --explicit-auth-flows "ADMIN_NO_SRP_AUTH"</code></p>
                 <img src="assets/img/assignment_imgs/assignment6/q3_update_client_auth_flows.png" alt="">
                 <p>So here we specify that NO-SRP is needed to authenticate.</p>
-                <p>Now we can go and initiate the sign-up for the user client. We use the following command</p>
+                <p>Now we can go and initiate the sign-up for the user client. We use the following command:</p>
                 <p><code>aws cognito-idp admin-initiate-auth --user-pool-id us-east-1_HE6pT40ed --client-id 68u57vg37jms555l2ud8ku861b --auth-flow ADMIN_NO_SRP_AUTH --auth-parameters USERNAME="admin",PASSWORD="abc123!@#"</code></p>
                 <p>This command will prompt with a HUGE <b>IdToken</b> that we will use as a Authentication token when sending a request to the API.</p>
                 <p>NOTE: It is important to mention that Amazon Cognito creates Tokens of type <b>Bearer</b> when initiating user authentications, so when sending the request to the API, remember to specify that the authentication token is <b>Bearer</b> type.</p>
@@ -333,7 +333,7 @@
                 <p>Now let's test the <code>GET</code> request to the API with <b>NO</b> Authorization specified:</p>
                 <img src="assets/img/assignment_imgs/assignment6/q3_postman_auth_get_unauthorized.png" width="100%" alt="">
                 <p>As we can see, we are not Authorized to send requests to the API if the user is not authenticated.</p>
-                <p>If you to send more requests, and token expires, just use <code>aws cognito admin-initiate-auth</code>, to initiate another user authentication and you will another token available for a couple of minutes.</p>
+                <p>If you to send more requests, and the token expires, just use the <code>aws cognito admin-initiate-auth</code> command again to initiate another user authentication and you will have another token available for a couple of minutes.</p>
 
 
                 <!-- Ends accordion item 3 content -->
