@@ -113,19 +113,71 @@
             </button>
             <div id="assignment-q2" class="collapse mb-3">
               <div align="justify">
-                <p>In order to perform this task, we must go and edit our Lambda function code. In this case, because of my implementation, and will perform this task in a different way that we did on class. I will only edit my <code>crud_dynamodb</code> file, and include the features needed to call the <b>Weather API</b> in order to get the weather for the city that the student has specified in its Item in the DynamoDB table. NOTE: I already had my Lambda and API working correctly, so I will skip all these steps we saw in class for creating and setting up the Lambda function and the API Gateway API. </p>
-                <h4>Prerequisites</h4>
-                <p>Before beginning to update the CRUD file, first we need to update our <b>item</b> in the DynamoDB table, to add the field <b>weather</b>, so we can store the weather data in this field.</p>
-                <p>This can be simply done by sending a <code>PATCH</code> request to our item in the table and adding the <b>weather</b> field. <br>
-                <b>NOTE:</b> Because of my implementation, I need to update a little bit the <code>update</code> function in the CRUD file to update a <b>weather</b> field when added. If we don't do this step, we will an error when sending a <code>PATCH</code> request because our function can not update <b>non-existing</b> fields without specifying them inside the method.</p>
-                
+                <p>In order to perform this task, we must go and edit our Lambda function code. In this case, because of my implementation, and will perform this task in a different way that we did in class. I will only edit my <code>crud_dynamodb</code> file, 
+                  and include the features needed to call the <b>Weather API</b> in order to get the weather for the city that the student has specified in its Item in the DynamoDB table. NOTE: I already had my Lambda and API working correctly, so I will skip 
+                  all these steps we saw in class for creating and setting up the Lambda function and the API Gateway API. </p>
+
                 <h4><b>Updating the CRUD file and adding methods to request the weather using the Weather API</b></h4>
-                <p>First, for simplicity, I will use some of the code we used in class to get the weather with a request to the weather API. In this case, I will bring the <code>secretsmanager</code> secret generator to get an API key, so the API can use this keys when making request to have the information secured from unauthorized calls. Also, I will also bring the method to make a simple <code>GET</code> request to the Weather API, which is the <code>get_weather</code> function.</p>
-                <p>So to summarize, I will bring the <code>get_secret</code> and the <code>get_weather</code> functions and make them work within my code.</p>
-                <p></p>
+                <p>First, for simplicity, I will use some of the code we used in class to get the weather with a request to the weather API. In this case, I will bring the <code>secretsmanager</code> secret generator function to get an API key, so that the weather API can uses it when making requests, 
+                  this is important because it allows us to have the information secured from unauthorized calls. Also, I will also bring the <code>get_weather</code> function which uses a library to make simple requests on python, which is <b>urllib3</b> so we can simplify code and invoke a <code>GET</code> 
+                request using the library to the weather API.</p>
+                <p>So, bringing the <code>get_secret</code> and the <code>get_weather</code> functions to my code and change my code a little bit to work correctly with these new functions.</p>
+                <p>First, I will update the <code>get_resource</code> function, the function that reads on the DynamoDB table to get the item, to include the API key generation and to include the call to the weather API.</p>
+                <img src="assets/img/assignment_imgs/assignment6/q2_modified_read_function.png" alt="">
+                <p>Here I'm just include the code to make a call to the weather API to get the weather data on the student's city, and then I created an auxiliary function to update the current <b>Item</b>, the current Student Item from the DynamoDB table, and add a field called 
+                <b>weather</b> and include the weather data, from the API call, into this field.<br>
+                Note that I need to pass in to the function 3 parameters: <b>response</b> which is the Item that we got from the DynamoDB <code>get_item</code> method, meaning the student, <b>weather</b>, which is the weather data we got from the Weather API call, 
+                and a <b>case='r'</b> which, because of this implementation, specifies that this update comes from a <b>read</b> function response. Which is different from a <b>update</b> function response. I'll explain this later. <br>
+                This is what the <code>update_item_weather</code> auxiliary function looks like:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q2_update_item_weather_function.png" alt="">
+                <p>As mentioned, the <b>case</b> is needed because the response Item of the <code>get_item</code> and the <code>update_item</code> methods from DynamoDB, are <b>different</b>. <br>
+                Both methods return a JSON, but the name of the keys are different, so we need to specify that the <b>id</b> in the <code>update_item_weahter</code> is got from a different key name. <br>
+                Let me show you what this means:</p>
+                <div class="container row">
+                  <div class="col-lg-6"><p><b>Response body example of <code>get_item</code> DynamoDB method:</b></p>
+                    <img src="assets/img/assignment_imgs/assignment6/q2_resonse_body_get_item.png" alt="">
+                  </div>
+                  <div class="col-lg-6"><p><b>Response body example of <code>update_item</code> DynamoDB method:</b></p>
+                    <img src="assets/img/assignment_imgs/assignment6/q2_resonse_body_update_item.png" alt="">
+                  </div>
+                </div>
+                <p>As we can see, the name of the <b>keys</b> in the resposne body are different, so this is why the <b>case</b> parameter is specified as <b>'r'</b> if the update comes from the <code>get_item</code> function.</p>
+                <p>Also, I'm using the functions we saw in class as auxiliary functions, <code>get_weather</code> and <code>get_secret</code> functions. These just needed to be modified a little bit to make them work with my implementation.</p>
+                <div class="container row">
+                  <div class="col-lg-6"><p><b><code>get_weather</code> auxiliary function:</b></p>
+                    <img src="assets/img/assignment_imgs/assignment6/q2_get_weather_function.png" width="100%" alt="">
+                  </div>
+                  <div class="col-lg-6"><p><b><code>get_secret</code> auxiliary function:</b></p>
+                    <img src="assets/img/assignment_imgs/assignment6/q2_get_secret_function.png" width="100%" alt="">
+                  </div>
+                </div>
+                <p>NOTE: Something funny I noticed, and maybe I forgot if it was mentioned in class, is that when I tried to change the <b>secret_name</b> I got an error. Then I figured out that maybe that secret_name was needed as it was 
+                because the error I was getting was something about <em>invalid secret name</em>. So I changed it back as it was from the beginning LOL.</p>
+                <p>Now let's go and test the new <b>get_resource</b> function by sending a <code>GET</code> request to the API. Again, I'm going to use <b>Postman</b> to send the request.</p>
+                <img src="assets/img/assignment_imgs/assignment6/q2_postman_getWithWeather_test.png" width="100%" alt="">
+                <p>Nice, the <b>get</b> function is working correctly and we are getting the <b>weather data</b> of the city assigned to our DynamoDB Item and place it in the <b>weather</b> field we added with the <code>update_item_weather</code> auxiliary function.</p>
+                
+                <h4>Extra: Updating the update_resource function to also update the weather if the student's city is updated</h4>
+                <p>I know that this step was not actually neccessary, but I thought it would a good idea to add this to keep the integrity of the code. So if there is an update on the student's city in the DynamoDB table, I will also update 
+                  the weather for the new city after the Item is updated. <br>
+                  This is how my <code>update_function</code> looks like after being modified:</p>
+                  <img src="assets/img/assignment_imgs/assignment6/q2_modified_update_function.png" width="100%" alt="">
+                <p>Also I modified the <b>UpdateExpression</b> from my last modification on this function, to make more simple the <code>PATCH</code> request body</p>
+                <p>Here in the modified <code>update_resource</code> function, there a validation of the student's city, so if the city is updated, we are calling the weather API to get the weather of the new city.</p>
+                <p>Note that in the actual update, it is not possible to update or change, the exisiting weather field, because of integrity, this weather data is updated directly within an Weather API call.</p>
+                <p>Another important thing to notice is that, now when calling the <code>update_item_weather</code> function, the case is now specified as <b>'u'</b> which means that the update comes from the <code>update</code> function, and not from the read function. 
+                This is what I mentioned earlier about the response body output for the <code>read</code> and <code>update</code> DynamoDB methods, and this will tell the <code>update_item_weather</code> function to get the <b>id</b> from the 
+                corresponding JSON response.</p>
+                <img src="assets/img/assignment_imgs/assignment6/q2_update_item_weather_function.png" alt="">
+                <p>Now we are specifiying that the <b>id</b> is the one in the <code>update</code> response body.</p>
+                <p>To test it, let's use <b>Postman</b> to send a <code>PATCH</code> request and change the city of our Item:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q2_postman_updateWithWeather_test.png" width="100%" alt="">
+                <p>As we can see, I changed the city to <b>Ensenada</b> and the update automatically calls the weather API and gets the weather for that city. We can compare with our first <code>GET</code> call where the city was assigned as <b>Tijuana,MX</b>.</p>
+
+                <!-- Ends accordion item 2 content -->
               </div>
             </div>
-  
+            
             <!-- Accordion item 3 -->
             <button
               class="accordion-button collapsed mb-3"
@@ -137,7 +189,154 @@
             </button>
             <div id="assignment-q3" class="collapse mb-3">
               <div align="justify">
-                
+                <p>To add authorization to the API, I'm going to use <b>Amazon Cognito</b>, specifically, the user pools API.</p>
+                <p><b>What is Amazon Cognito?</b></p>
+                <p>Is it a AWS service that provides us authentication, authorization, and user management for web and mobile apps. With Amazon Cognito, users can sign in directly with a <em>user name</em> and <em>password</em>, 
+                or through a third party su as <b>Facebook</b>, <b>Amazon</b>, <b>Google</b> or <b>Apple</b>.</p>
+                <p>The main components of Amazon Cognito are: <b>user pools</b> and <b>identity pools.</b> User pools are <em>user directories</em> that provide sign-up and sign-in options for app users. Identity pools enable us to grant users access to other AWS services. 
+                For more information about <b>Amazon Cognito</b>, visit <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html">Amazon Cognito Documentation.</a></p>
+                <p><b>Why use Amazon Cognito?</b><br>
+                Amazon Cognito is a powerful and flexible tool with a wide range of featuers and integrations that can simplify implementation for developers, also, it is a secure and scalable solution, allowing the developers to save time and focus to other tasks 
+                while leaving the authentication and autherization implementation to AWS. <br>
+                There are some advantages and disadvantages when using Amazon Cognito:</p>
+                <ul>Advantages
+                  <li><b>Easy integration with AWS services - </b>e can easily use our Lambda and API Gateway API with Amazon Cognito to make them secure.</li>
+                  <li><b>Scalability - </b>It can scale application's needs, and handle many many users, and handle many many users.</li>
+                  <li><b>Flexibility - </b>The authentication and authorization service is flexible and use social identity third parties.</li>
+                  <li><b>Security - </b>It has many security features out of the box, like multi-factor authentication and encryption of data at rest and in transit.</li>
+                  <li><b>Cost-effective - </b>As any other AWS service, it is a pay-as-you-go service.</li>
+                </ul>
+                <ul>Disadvantages
+                  <li><b>Learning curve - </b>Can be complex to set up and configure for an AWS starter.</li>
+                  <li><b>Limited customization - </b>Customizing the authentication and authorization flows can have some limitations.</li>
+                  <li><b>Vendor lock-in - </b>The more use of Cognito, the more is likely to become dependent to it and it could be difficult to switch to another provider.</li>
+                  <li><b>Third-party dependencies - </b>Cognito relies on third-party providers for social identity authentication. So dealing with multiple providers may result complex.</li>
+                </ul>
+                <p>So in this case, as we are using AWS Lambda and AWS API Gateway services, the best choice is to use Amazon Cognito for the autentication and authorization service.</p>
+                <p>There some steps that need to be followed in order to add authorization the API Gateway API, so let's begin with it</p>
+                <h4>1. Create an Amazon Cognito user pool</h4>
+                <p>This user pool will be used to manage user sign-up and sign-in for the API. To create a new user pool, use the following command:</p>
+                <p><code>aws cognito-idp create-user-pool --pool-name jaxelc-user-pool</code></p>
+                <p>This will create a new user pool, the name can be change to preference. <br>
+                The command will prompt with a BIG JSON, containing all the configuration for the user pool created. These configuration settings can be modified later, but the important here is the <b>user pool id</b> which is often at the top of the response. <br>
+                This is a part of the response:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_user_pool_creation_output.png" alt="">
+                <p>Identify the user pool <b>id</b>, this is needed to perform next steps. <br>
+                NOTE: By default, the user pool configures the password with some settings, called <b>PasswordPolicy</b>, which specifies the conditions that the password assigned needs to meet some requirements, in this case we haven't set up a password, also we can modify this settings later when we set the password.</p>
+                <h4>2. Create an Amazon Cognito user pool client</h4>
+                <p>Next, we need to create an <b>user pool client</b> for the user pool created to handle the authentication for the API. To create an user pool client, use the following command:</p>
+                <p><code>aws cognito-idp create-user-pool-client --user-pool-id us-east-1_HE6pT40ed --client-name jaxelc-user-pool-client --no-generate-secret --supported-identity-providers "COGNITO"</code></p>
+                <p>This command will prompt something like this:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_user_pool_client_creation_output.png" alt="">
+                <p>Here we specify:</p>
+                <ul>
+                  <li>The id of the user pool we are creating the client to, in this case my user pool id is <b>us-east-1_HE6pT40ed</b></li>
+                  <li>The name of the user pool client, in this case I named my client as <b>jaxelc-user-pool-client</b></li>
+                  <li>The <b>--no-generate-secret</b> is used to specify the client to not create an <b>api key</b> to use in the API, we are going to set an username and a password.</li>
+                  <li>And the <b>--supported-identity-providers</b> specify which authentication provider we are going to use, so in this case we are going to use <b>AWS Cognito</b>.</li>
+                </ul>
+                <h4>3. Update the Amazon Cognito user pool Password policies</h4>
+                <p>Remember that when creating an user pool, the Password policies are set differently from what we need. So we need to update the <b>PasswordPolicy</b> parameter in the user pool. <br>
+                To do this, use the following command:</p>
+                <p><code>aws cognito-idp update-user-pool --user-pool-id us-east-1_HE6pT40ed --policies PasswordPolicy='{MinimumLength=8, RequireLowercase=false, RequireUppercase=false, RequireNumbers=false, RequireSymbols=false}'</code></p>
+                <p>With this we have updated our Password policies to specify that the password needs:</p>
+                <ul>
+                  <li>A minimum length of 8</li>
+                  <li>Does not mandatory require a lowercase, an uppercase, a number or a symbol.</li>
+                </ul>
+                <p>To check if the user pool was updated, we can use the following command:</p>
+                <p><code>aws cognito-idp describe-user-pool --user-pool-id us-east-1_HE6pT40ed</code></p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_user_pool_passwordPolicy_update.png" alt="">
+                <p>The changes were successful.</p>
+                <h4>4. Create a user authentication for the user pool client</h4>
+                <p>Now we need to create a user authentication for the user pool client. Here we are going to specify the <b>username</b> and <b>password</b>, in this case the user will be <b>admin</b> and the password will be <b>abc123!@#</b>.</p>
+                <p>To create a user, use the following command:</p>
+                <p><code>aws cognito-idp sign-up --client-id 68u57vg37jms555l2ud8ku861b --username "admin" --password "abc123!@#"</code></p>
+                <p>Here, the <b>client-id</b> is the user pool client created in step 2.</p>
+                <p>We will get this prompt:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_user_pool_client_user_signup.png" alt="">
+                <p>We have created the user for the user pool client, and as we can see, it says that the user is <b>not confirmed</b>, so we need to confirm the user sign-up.</p>
+                <h4>5. Confirming the user sign-up</h4>
+                <p>When creating a new user sign-up in the user pool client, by default the user is not confirmed, so we need to confirm the user sign-up in order for the authentication to work properly.</p>
+                <p>To confirm the user sign-up in the user pool client, user the following command:</p>
+                <p><code>aws cognito-idp admin-confirm-sign-up --user-pool-id us-east-1_HE6pT40ed --username "admin"</code></p>
+                <p>This will confirm the user's username and complete the sign-up process so the authentication works properly.</p>
+                <p>If you want to check if the user was correctly confirmed, use the following command:</p>
+                <p><code>aws cognito-idp list-users --user-pool-id us-east-1_HE6pT40ed</code></p>
+                <p>This will list all the users in Amazon Cognito user pool associated with the given <b>user pool id</b>. In this case, will list the users associated with my user pool client:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_list_users.png" alt="">
+                <p>Here I have the <b>admin</b> user we created in step 4, and we can see that it is <b>Confirmed</b>.</p>
+                <h4>6. Create an API Gateway Authorizer to use the user pool</h4>
+                <p>Now we need to create an API Gateway Authorizer that's going to use Amazon Cognito to authenticate requests. In this case, the authorizer is going to use the Cognito user pool to check wheter the user is authenticated and authorized to access the resource that is being requested.</p>
+                <p>To create the API Gateway Authorize, use the following command:</p>
+                <p><code>aws apigateway create-authorizer --rest-api-id i3jytdsbre --name jaxelc-api-authorizer --type COGNITO_USER_POOLS --provider-arns 'arn:aws:cognito-idp:us-east-1:292274580527:userpool/us-east-1_HE6pT40ed' --identity-source 'method.request.header.Authorization' --authorizer-result-ttl-in-seconds 300</code></p>
+                <p>Here:</p>
+                <ul>
+                  <li>The rest api id is the API Gateway API <b>id</b>, in this case my API id is i3jytdsbre</li>
+                  <li>The name of the authorizer can be any name, in this I named it <b>jaxelc-api-authorizer</b></li>
+                  <li>The <b>type</b>. There are 3 valid types of authorizers: <code>TOKEN</code> which a Lambda function uses a <em>single authorization token</em> in a custom header, <code>REQUEST</code> when we want to use a custom Lambda that uses incoming request parameters, and the <code>COGNITO_USER_POOLS</code> which uses Amazon Cognito user pools. 
+                    In this case since we are using Amazon Cognito, the type is going to be <b>COGNITO_USER_POOLS</b>, so the authorizer uses Amazon Cognito to check if the user is authenticated.</li>
+                  <li>The <b>provider arns</b> which is the ARN assigned to our Amazon cognito user pool. If you want to check the ARN for your user pool, use this command: <br>
+                  <code>aws cognito-idp create-user-pool --pool-name jaxelc-user-pool</code> <br>
+                  Just replace <b>pool name</b> with your user pool name, and then look for the <b>Arn</b>.
+                </li>
+                  <li>The <b>identity source</b>, is the source for which authorization is requested, this is needed when using<code>TOKEN</code> and <code>COGNITO_USER_POOLS</code> authorizers because it specifies the header, or headers, with the authorization data for the client. In this case we are going to use the <b>Authorization</b> header in the request for the authentication. 
+                  Then in next steps we are going to specify that the <b>Authorization</b> header will have the credentials create in step 4, this is the username and the password, which are <b>admin</b> and <b>abc123!@#</b>.</li>
+                  <li>Finally, in the <b>authorizer result ttl in seconds</b> we are specifying that the authentication data will be cached for 300 seconds, or 5 min, so the user will last 5 minuted authenticated.</li>
+                </ul>
+                <p>This will create the authorizer and prompt with something like this:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_create_authorizer.png" alt="">
+                <p>If we want to make changes to the authorizer at sometime, we are going need the <b>authorizer id</b>, so in this case mine is <b>pmthvy</b>.</p>
+                <h4>7. Update the authorizer so the API Gateway use it</h4>
+                <p>Now we need to update the authorizer, and tell the API Gateway API to use this authorizer, so whenever the API sends a request, it will use the authorizer to create an IAM policy that controll the access to the request API endpoint based on the user's permissions.</p>
+                <p>To update the authorizer, use the following command:</p>
+                <p><code>aws apigateway update-authorizer --rest-api-id i3jytdsbre --authorizer-id pmthvy --patch-operations op='replace',path='/type',value='COGNITO_USER_POOLS' op='replace',path='/authorizerUri',value='arn:aws:apigateway:us-east-1:cognito-idp:authorize' op='replace',path='/identitySource',value='method.request.header.Authorization'</code></p>
+                <p>Here we are specifying the api authorizer to get the autentication data from the <b>Authorization</b> header as the identity source so it validates the information and authenticates de user.</p>
+                <p>This is the output:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_update_authorizer.png" alt="">
+                <h4>8. Update the HTTP Methods by adding the Authorization header to them</h4>
+                <p>Now we need to update all of our <code>HTTP</code> methods that we use the our API to add the authorizer to them, so when they are invoked, they will use the authorizer to check the authentication status of the user.</p>
+                <p>Use the following command to update each method:</p>
+                <ul><li><p><b>Updating the <code>GET</code> Http method:</b></p></li></ul>
+                <p><code>aws apigateway update-method --rest-api-id i3jytdsbre --resource-id 6hkxn7 --http-method GET --patch-operations op='replace',path='/authorizationType',value='COGNITO_USER_POOLS' op='replace',path='/authorizerId',value='pmthvy'</code></p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_update_method_GET.png" width="100%" alt="">
+                <ul><li><p><b>Updating the <code>POST</code> Http method:</b></p></li></ul>
+                <p><code>aws apigateway update-method --rest-api-id i3jytdsbre --resource-id 472k48 --http-method POST --patch-operations op='replace',path='/authorizationType',value='COGNITO_USER_POOLS' op='replace',path='/authorizerId',value='pmthvy'</code></p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_update_method_POST.png" width="100%" alt="">
+                <ul><li><p><b>Updating the <code>PATCH</code> Http method:</b></p></li></ul>
+                <p><code>aws apigateway update-method --rest-api-id i3jytdsbre --resource-id pcan0l --http-method PATCH --patch-operations op='replace',path='/authorizationType',value='COGNITO_USER_POOLS' op='replace',path='/authorizerId',value='pmthvy'</code></p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_update_method_PATCH.png" width="100%" alt="">
+                <ul><li><p><b>Updating the <code>DELETE</code> Http method:</b></p></li></ul>
+                <p><code>aws apigateway update-method --rest-api-id i3jytdsbre --resource-id viaf3c --http-method DELETE --patch-operations op='replace',path='/authorizationType',value='COGNITO_USER_POOLS' op='replace',path='/authorizerId',value='pmthvy'</code></p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_update_method_DELETE.png" width="100%" alt="">
+                <p>On each of these methods I specify that replace the previous <b>authorization type</b> which was <b>NONE</b>, to now use the authorizer.</p>
+                <h4>9. Deploy the API Gateway API</h4>
+                <p>Finally, for all these settings to be applied in the API Gateway API, since we made updates in the API, we need to redeploy the API. Using the <em>create deploy</em> command from API Gateway.</p>
+                <p>Use the command to deploy the API:</p>
+                <p><code>aws apigateway create-deployment --rest-api-id i3jytdsbre --stage-name prod --description 'Authorization added to the API'</code></p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_deploy_api.png" alt="">
+                <h4>Testing the API with the Authorization</h4>
+                <p>In order to test our API with the authorizer, first we need to iniate a user authentication, in simply words, log in the user client specified in Amazon Cognito.</p>
+                <p>To do this, we to update the <b>user pool client</b> and specify that the user can perform an authentication flow that doesn't use the <em>Secure Remote Password</em> protocol.</p>
+                <p>We use the following command to update the user pool client:</p>
+                <p><code>aws cognito-idp update-user-pool-client --user-pool-id us-east-1_HE6pT40ed --client-id 68u57vg37jms555l2ud8ku861b --supported-identity-providers "COGNITO" --explicit-auth-flows "ADMIN_NO_SRP_AUTH"</code></p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_update_client_auth_flows.png" alt="">
+                <p>So here we specify that NO-SRP is needed to authenticate.</p>
+                <p>Now we can go and initiate the sign-up for the user client. We use the following command</p>
+                <p><code>aws cognito-idp admin-initiate-auth --user-pool-id us-east-1_HE6pT40ed --client-id 68u57vg37jms555l2ud8ku861b --auth-flow ADMIN_NO_SRP_AUTH --auth-parameters USERNAME="admin",PASSWORD="abc123!@#"</code></p>
+                <p>This command will prompt with a HUGE <b>IdToken</b> that we will use as a Authentication token when sending a request to the API.</p>
+                <p>NOTE: It is important to mention that Amazon Cognito creates Tokens of type <b>Bearer</b> when initiating user authentications, so when sending the request to the API, remember to specify that the authentication token is <b>Bearer</b> type.</p>
+                <p>Also This token expires after some time, and for security reasons I'm not showing the Token.</p>
+                <p>I'm going to use <b>Postman</b> to test a <code>GET</code> request, and see if the authorizer is working correctly and the Token works within the authorizer:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_postman_auth_get_test.png" width="100%" alt="">
+                <p>As we can see we are using the <b>Authorization</b> header with the Token from the authenticated user, and this is a <b>Bearer Token</b> authorization.</p>
+                <p>Now let's test the <code>GET</code> request to the API with <b>NO</b> Authorization specified:</p>
+                <img src="assets/img/assignment_imgs/assignment6/q3_postman_auth_get_unauthorized.png" width="100%" alt="">
+                <p>As we can see, we are not Authorized to send requests to the API if the user is not authenticated.</p>
+                <p>If you to send more requests, and token expires, just use <code>aws cognito admin-initiate-auth</code>, to initiate another user authentication and you will another token available for a couple of minutes.</p>
+
+
+                <!-- Ends accordion item 3 content -->
               </div>
             </div>
 

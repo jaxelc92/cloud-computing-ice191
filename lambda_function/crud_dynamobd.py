@@ -48,8 +48,11 @@ def get_resource(event, context):
             'id': {'S': id} # get the id from the path parameter in the API Gateway URL
             })
         if 'Item' in response.keys():
+            # Adding the Weather API call to the GET function
             api_key = get_secret()
             weather = get_weather(response, api_key)
+            # updates the current item to add a 'weather' field on it to store the weather data
+            # in the DynamoDB table
             succes_response = update_item_weather(response, weather, case='r')
             return {
                 'statusCode': 200,
@@ -74,12 +77,12 @@ def update_resource(event, context):
         if get_response['statusCode']==200: # If item exists do update
             id = event.get('pathParameters').get('id')
             item = json.loads(event['body'])
-            original_city = item['payload']['city']['S']
+            original_city = item['city']['S']
             response = dynamodb.update_item(
                 TableName=table,
                 Key={'id': {'S': id}}, # Use 'S' type specifier to indicate that 'id' is a string
-                UpdateExpression = item['UpdateExpression'],
-                ExpressionAttributeValues = {":name": item["payload"]["full_name"], ":website": item["payload"]["personal_website"], ":city": item["payload"]["city"]},
+                UpdateExpression = 'SET full_name = :name, personal_website = :website, city = :city',
+                ExpressionAttributeValues = {":name": item["full_name"], ":website": item["personal_website"], ":city": item["city"]},
                 ConditionExpression='attribute_exists(id)',
                 ReturnValues='ALL_NEW'
             )
