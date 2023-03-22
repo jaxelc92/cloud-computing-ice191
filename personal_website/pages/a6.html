@@ -272,13 +272,13 @@
                 <p><code>aws apigateway create-authorizer --rest-api-id i3jytdsbre --name jaxelc-api-authorizer --type COGNITO_USER_POOLS --provider-arns 'arn:aws:cognito-idp:us-east-1:292274580527:userpool/us-east-1_HE6pT40ed' --identity-source 'method.request.header.Authorization' --authorizer-result-ttl-in-seconds 300</code></p>
                 <p>Here:</p>
                 <ul>
-                  <li>The rest api id is the API Gateway API <b>id</b>, in this case my API id is i3jytdsbre</li>
+                  <li>The rest api id is the API Gateway API <b>id</b>, in this case my API id is <b>i3jytdsbre</b></li>
                   <li>The name of the authorizer can be any name, in this I named it <b>jaxelc-api-authorizer</b></li>
                   <li>The <b>type</b>. There are 3 valid types of authorizers: <code>TOKEN</code> which a Lambda function uses a <em>single authorization token</em> in a custom header, <code>REQUEST</code> when we want to use a custom Lambda that uses incoming request parameters, and the <code>COGNITO_USER_POOLS</code> which uses Amazon Cognito user pools. 
                     In this case since we are using Amazon Cognito, the type is going to be <b>COGNITO_USER_POOLS</b>, so the authorizer uses Amazon Cognito to check if the user is authenticated.</li>
                   <li>The <b>provider arns</b> which is the ARN assigned to our Amazon cognito user pool. If you want to check the ARN for your user pool, use this command: <br>
-                  <code>aws cognito-idp create-user-pool --pool-name jaxelc-user-pool</code> <br>
-                  Just replace <b>pool name</b> with your user pool name, and then look for the <b>Arn</b>.
+                  <code>aws cognito-idp describe-user-pool --user-pool-id us-east-1_HE6pT40ed</code> <br>
+                  Just replace <b>pool id</b> with your user pool id, and then look for the <b>Arn</b>.
                 </li>
                   <li>The <b>identity source</b>, is the source for which authorization is requested, this is needed when using<code>TOKEN</code> and <code>COGNITO_USER_POOLS</code> authorizers because it specifies the header, or headers, with the authorization data for the client. In this case we are going to use the <b>Authorization</b> header in the request for the authentication. 
                   Then in next steps we are going to specify that the <b>Authorization</b> header will have the credentials create in step 4, this is the username and the password, which are <b>admin</b> and <b>abc123!@#</b>.</li>
@@ -290,8 +290,21 @@
                 <h4>7. Update the authorizer so the API Gateway uses it</h4>
                 <p>Now we need to update the authorizer, and tell the API Gateway API to use this authorizer, so whenever a request is sent to the API, it will use the authorizer to create an IAM policy that controll the access to the request API endpoint based on the user's permissions.</p>
                 <p>To update the authorizer, use the following command:</p>
-                <p><code>aws apigateway update-authorizer --rest-api-id i3jytdsbre --authorizer-id pmthvy --patch-operations op='replace',path='/type',value='COGNITO_USER_POOLS' op='replace',path='/authorizerUri',value='arn:aws:apigateway:us-east-1:cognito-idp:authorize' op='replace',path='/identitySource',value='method.request.header.Authorization'</code></p>
-                <p>Here we are specifying the api authorizer to get the autentication data from the <b>Authorization</b> header as the identity source so it validates the information and authenticates de user.</p>
+                <p><code>aws apigateway update-authorizer --rest-api-id i3jytdsbre --authorizer-id pmthvy --patch-operations op='replace',path='/type',value='COGNITO_USER_POOLS' op='replace',path='/authorizerUri',value='arn:aws:apigateway:us-east-1:cognito-idp:us-east-1:292274580527:userpool/us-east-1_HE6pT40ed' op='replace',path='/identitySource',value='method.request.header.Authorization'</code></p>
+                <p>When updating an API Gateway Authorizer, the changes to make need to be specify as <b>operations.</b> These operations take place in the <b>--patch-operations</b> parameter, and each operation takes in 4 attributes, with 3 of them being mandatory to be specify:</p>
+                <ul>
+                  <li><b>from</b> (not mandatory) This is the copy update operation's source, identified as a JSON-pointer value.</li>
+                  <li><b>op</b> Specifies an update operation to be performed with this request. Valid operations are: add, remove, replace or copy</li>
+                  <li><b>path</b> The op operation's target, identified as a JSON-pointer value.</li>
+                  <li><b>value</b> The new target value of the update operation</li>
+                </ul>
+                <p>In this we are performing 3 operations to be patch, or updated:</p>
+                <ol>
+                  <li>Changing the type of the authorizer as <code>COGNITO_USER_POOLS</code>, just in case it wasn't specified when the authorizer was created</li>
+                  <li>Change the <b>authorizerUri</b>, this is where we are telling the authorizer that is going to be called, or used, by the API Gateway API and the authorizer is comming from the Amazon Cognito user pool</li>
+                  <li>Changing the <b>identitySource</b>, which is where we are telling the authorizer to get the authentication and authorization data of the user from the <b>Authorization</b> header of the request.</li>
+                </ol>
+                <p>Note that it is important to specify the correct <b>authorizerUri</b>, specify your user pool ARN in the uri, so just replace this authorizerUri with yours, if this is not set correctly, the API Gateway API will not use the authorizer to get the user data and the requests will be <b>unauthorized</b>.</p>
                 <p>This is the output:</p>
                 <img src="assets/img/assignment_imgs/assignment6/q3_update_authorizer.png" alt="">
                 <h4>8. Update the HTTP Methods by adding the Authorization header to them</h4>
@@ -315,9 +328,13 @@
                 <p>Use the command to deploy the API:</p>
                 <p><code>aws apigateway create-deployment --rest-api-id i3jytdsbre --stage-name prod --description 'Authorization added to the API'</code></p>
                 <img src="assets/img/assignment_imgs/assignment6/q3_deploy_api.png" alt="">
+                <p>Now the API is deployed and ready to test and use.</p>
                 <h4>Testing the API with the Authorization</h4>
                 <p>In order to test our API with the authorizer, first we need to iniate a user authentication, in simply words, log in the user client specified in Amazon Cognito.</p>
-                <p>To do this, we to update the <b>user pool client</b> and specify that the user can perform an authentication flow that doesn't use the <em>Secure Remote Password</em> protocol.</p>
+                <p>To do this, we need to update the <b>user pool client</b> and specify that the user can perform an authentication flow that doesn't use the <em>Secure Remote Password</em> protocol.</p>
+                <p>Secure Remote Password (SRP) is a client-server protocol that it is used as a layer of security to authenticate 2 endpoints without transmitting passwords over the network. Since the 2 endpoints use <em>one-way functions</em>, which are complex mathematical functions that are easy to compute in one direction 
+                  but practically impossible to compute in the reverse direction, it is considered a complex protocol to implement. If you want to add more security to the authentication proccess, you can implement the protocol for you application and call the authentication with it. For simplicity,  it is not necessary to use the SRP. <br>
+                  So we need to disable the use of the SRP in our user pool client, since it is enable by default.</p>
                 <p>We use the following command to update the user pool client:</p>
                 <p><code>aws cognito-idp update-user-pool-client --user-pool-id us-east-1_HE6pT40ed --client-id 68u57vg37jms555l2ud8ku861b --supported-identity-providers "COGNITO" --explicit-auth-flows "ADMIN_NO_SRP_AUTH"</code></p>
                 <img src="assets/img/assignment_imgs/assignment6/q3_update_client_auth_flows.png" alt="">
