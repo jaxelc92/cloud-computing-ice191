@@ -7,6 +7,9 @@
 // Scripts
 // 
 
+// const chatWindow = document.getElementById("chatgpt");
+// const chatToggle = document.getElementById("chat-toggle")
+
 window.addEventListener('DOMContentLoaded', event => {
 
     // Navbar shrink function
@@ -22,6 +25,10 @@ window.addEventListener('DOMContentLoaded', event => {
         }
 
     };
+
+    // chatToggle.addEventListener("click", function() {
+    //     chatWindow.classList.toggle("expanded")
+    // });
 
     // Shrink the navbar 
     navbarShrink();
